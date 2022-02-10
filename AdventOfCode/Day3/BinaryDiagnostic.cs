@@ -6,6 +6,8 @@ namespace AdventOfCode.Day3
 {
     public class BinaryDiagnostic
     {
+        #region Part One
+
         public static decimal PartOne(string[] input)
         {
             var size = input[0].Length;
@@ -31,21 +33,15 @@ namespace AdventOfCode.Day3
             return 0;
         }
 
+        #endregion
+
+        #region Part Two
+
         public static decimal PartTwo(string[] input)
         {
-            var oxygenGeneratorRating = FindRating(input, '1', CompareForOxygenRating);
-            var co2ScrubberRating = FindRating(input, '0', CompareForCo2ScrubberRating);
+            var oxygenGeneratorRating = FindRating(input, '1', (withCriteria, withoutCriteria) => withCriteria >= withoutCriteria);
+            var co2ScrubberRating = FindRating(input, '0', (withCriteria, withoutCriteria) => withCriteria <= withoutCriteria);
             return oxygenGeneratorRating * co2ScrubberRating;
-        }
-
-        private static bool CompareForOxygenRating(int withCriteria, int withoutCriteria)
-        {
-            return withCriteria >= withoutCriteria;
-        }
-
-        private static bool CompareForCo2ScrubberRating(int withCriteria, int withoutCriteria)
-        {
-            return withCriteria <= withoutCriteria;
         }
 
         private static decimal FindRating(string[] input, char criteria, Func<int, int, bool> compare)
@@ -73,7 +69,9 @@ namespace AdventOfCode.Day3
 
             return BinaryStringToInt(remainingNumbers[0]);
         }
+        
 
+        #endregion
         private static int BitArrayToInt(int[] bits)
         {
             return BinaryStringToInt(string.Join("", bits));

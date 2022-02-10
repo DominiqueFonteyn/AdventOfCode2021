@@ -2,6 +2,7 @@
 using System.IO;
 using System.Linq;
 using AdventOfCode.Day1;
+using AdventOfCode.Day2;
 
 namespace AdventOfCode
 {
@@ -9,8 +10,11 @@ namespace AdventOfCode
     {
         private static void Main(string[] args)
         {
-            Console.WriteLine("Hello World!");
+            var dive = new Dive();
+            Console.WriteLine(dive.PartOne(File.ReadAllLines(args[0])));
+            Console.WriteLine(dive.PartTwo(File.ReadAllLines(args[0])));
 
+            return;
             var input = File.ReadAllLines(args[0]).Select(int.Parse).ToArray();
             var sonarSweep = new SonarSweep();
             Console.WriteLine($"Increases: {sonarSweep.CountNumberOfIncreases(input)}");

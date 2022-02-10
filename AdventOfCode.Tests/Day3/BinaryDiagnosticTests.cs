@@ -24,7 +24,13 @@ namespace AdventOfCode.Tests.Day3
         [Fact]
         public void PartOne()
         {
-            Assert.Equal(198, new BinaryDiagnostic().PartOne(_input));
+            Assert.Equal(198, BinaryDiagnostic.PartOne(_input));
+        }
+
+        [Fact]
+        public void PartTwo()
+        {
+            Assert.Equal(230, BinaryDiagnostic.PartTwo(_input));
         }
     }
 }

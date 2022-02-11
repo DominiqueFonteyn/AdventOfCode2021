@@ -12,7 +12,29 @@ namespace AdventOfCode.Day4
 
         public override int PartOne(string[] input)
         {
-            throw new NotImplementedException();
+            var numbers = ReadPickedNumbers(input);
+            var boards = ParseBoards(input);
+
+            BingoBoard winningBoard = null;
+            var lastNumber = 0;
+            foreach (var number in numbers)
+            {
+                lastNumber = number;
+                foreach (var board in boards)
+                {
+                    board.Mark(number);
+                    if (board.HasCompleteRow()) 
+                        winningBoard = board;
+                }
+
+                if (winningBoard != null)
+                    break;
+            }
+
+            if (winningBoard == null) return 0;
+
+            var sumOfUnmarked = winningBoard.UnmarkedNumbers().Sum(x => x);
+            return sumOfUnmarked * lastNumber;
         }
 
         public override int PartTwo(string[] input)

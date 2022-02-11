@@ -57,7 +57,11 @@ namespace AdventOfCode.Day4
                 var row = 0;
                 while (row < BingoBoard.Size)
                 {
-                    numbers.AddRange(input[i + row].Replace("  ", " ").Split(" ").Select(int.Parse));
+                    numbers.AddRange(
+                        input[i + row]
+                            .Split(" ")
+                            .Where(x => !string.IsNullOrWhiteSpace(x))
+                            .Select(int.Parse));
                     row++;
                 }
 

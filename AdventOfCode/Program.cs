@@ -1,6 +1,7 @@
 ﻿using System;
 using System.IO;
 using System.Linq;
+using AdventOfCode.Day4;
 
 namespace AdventOfCode
 {
@@ -8,6 +9,8 @@ namespace AdventOfCode
     {
         private static void Main(string[] args)
         {
+            Console.WriteLine(new GiantSquid().PartOne(File.ReadAllLines(args[0])));
+            
             if (!args.Any())
             {
                 Console.WriteLine("Please provide the directory of the input files as the first argument");

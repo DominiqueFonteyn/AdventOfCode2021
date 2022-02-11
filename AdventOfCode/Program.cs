@@ -1,6 +1,6 @@
 ﻿using System;
 using System.IO;
-using AdventOfCode.Day3;
+using System.Linq;
 
 namespace AdventOfCode
 {
@@ -8,8 +8,21 @@ namespace AdventOfCode
     {
         private static void Main(string[] args)
         {
-            Console.WriteLine(BinaryDiagnostic.PartOne(File.ReadAllLines(args[0])));
-            Console.WriteLine(BinaryDiagnostic.PartTwo(File.ReadAllLines(args[0])));
+            if (!args.Any())
+            {
+                Console.WriteLine("Please provide the directory of the input files as the first argument");
+                return;
+            }
+
+            var inputFolder = args[0];
+            if (!Directory.Exists(inputFolder))
+            {
+                Console.WriteLine($"{inputFolder} should point to a directory!");
+            }
+
+
+            // Console.WriteLine(BinaryDiagnostic.PartOne(File.ReadAllLines(args[0])));
+            // Console.WriteLine(BinaryDiagnostic.PartTwo(File.ReadAllLines(args[0])));
 
             // var dive = new Dive();
             // Console.WriteLine(dive.PartOne(File.ReadAllLines(args[0])));
@@ -20,5 +33,25 @@ namespace AdventOfCode
             // Console.WriteLine($"Increases: {sonarSweep.CountNumberOfIncreases(input)}");
             // Console.WriteLine($"Increases with 3-window: {sonarSweep.CountNumberOfIncreasesBySlidingWindow(input)}");
         }
+    }
+
+    
+    public interface IDay<out T>
+    {
+        int DayNr { get; }
+        T PartOne(string[] input);
+        T PartTwo(string[] input);
+    }
+
+    public abstract class Day<T> : IDay<T>
+    {
+        protected Day(int day)
+        {
+            DayNr = day;
+        }
+
+        public int DayNr { get; }
+        public abstract T PartOne(string[] input);
+        public abstract T PartTwo(string[] input);
     }
 }

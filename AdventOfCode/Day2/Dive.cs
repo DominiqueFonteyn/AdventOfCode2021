@@ -1,8 +1,12 @@
 ﻿namespace AdventOfCode.Day2
 {
-    public class Dive
+    public class Dive : Day<int>
     {
-        public int PartOne(string[] instructions, bool withAim = false)
+        public Dive() : base(2)
+        {
+        }
+
+        private int Calculate(string[] instructions, bool withAim = false)
         {
             var horizontal = 0;
             var depth = 0;
@@ -18,7 +22,7 @@
                     case "forward":
                         horizontal += amount;
                         if (withAim)
-                            depth += (aim * amount);
+                            depth += aim * amount;
                         break;
                     case "up":
                         if (!withAim) depth -= amount;
@@ -34,9 +38,14 @@
             return horizontal * depth;
         }
 
-        public int PartTwo(string[] instructions)
+        public override int PartOne(string[] input)
         {
-            return PartOne(instructions, true);
+            return Calculate(input);
+        }
+
+        public override int PartTwo(string[] input)
+        {
+            return Calculate(input, true);
         }
     }
 }

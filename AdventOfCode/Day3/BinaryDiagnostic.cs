@@ -4,11 +4,25 @@ using System.Linq;
 
 namespace AdventOfCode.Day3
 {
-    public class BinaryDiagnostic
+    public class BinaryDiagnostic : Day<decimal>
     {
+        public BinaryDiagnostic() : base(3)
+        {
+        }
+
+        private static int BitArrayToInt(int[] bits)
+        {
+            return BinaryStringToInt(string.Join("", bits));
+        }
+
+        private static int BinaryStringToInt(string binaryNumber)
+        {
+            return Convert.ToInt32(binaryNumber, 2);
+        }
+
         #region Part One
 
-        public static decimal PartOne(string[] input)
+        public override decimal PartOne(string[] input)
         {
             var size = input[0].Length;
             var gammaArray = new int[size];
@@ -25,7 +39,7 @@ namespace AdventOfCode.Day3
 
             return gamma * epsilonRate;
         }
-        
+
         private static int MostCommonBit(string[] input, int position)
         {
             var total = input.Sum(x => int.Parse(x[position].ToString()));
@@ -37,10 +51,12 @@ namespace AdventOfCode.Day3
 
         #region Part Two
 
-        public static decimal PartTwo(string[] input)
+        public override decimal PartTwo(string[] input)
         {
-            var oxygenGeneratorRating = FindRating(input, '1', (withCriteria, withoutCriteria) => withCriteria >= withoutCriteria);
-            var co2ScrubberRating = FindRating(input, '0', (withCriteria, withoutCriteria) => withCriteria <= withoutCriteria);
+            var oxygenGeneratorRating = FindRating(input, '1',
+                (withCriteria, withoutCriteria) => withCriteria >= withoutCriteria);
+            var co2ScrubberRating = FindRating(input, '0',
+                (withCriteria, withoutCriteria) => withCriteria <= withoutCriteria);
             return oxygenGeneratorRating * co2ScrubberRating;
         }
 
@@ -69,17 +85,7 @@ namespace AdventOfCode.Day3
 
             return BinaryStringToInt(remainingNumbers[0]);
         }
-        
 
         #endregion
-        private static int BitArrayToInt(int[] bits)
-        {
-            return BinaryStringToInt(string.Join("", bits));
-        }
-
-        private static int BinaryStringToInt(string binaryNumber)
-        {
-            return Convert.ToInt32(binaryNumber, 2);
-        }
     }
 }

@@ -1,8 +1,14 @@
-﻿namespace AdventOfCode.Day1
+﻿using System.Linq;
+
+namespace AdventOfCode.Day1
 {
-    public class SonarSweep
+    public class SonarSweep : Day<int>
     {
-        public int CountNumberOfIncreases(int[] measurements)
+        public SonarSweep() : base(1)
+        {
+        }
+
+        public int PartOne(int[] measurements)
         {
             var increases = 0;
 
@@ -13,7 +19,7 @@
             return increases;
         }
 
-        public int CountNumberOfIncreasesBySlidingWindow(int[] measurements)
+        public int PartTwo(int[] measurements)
         {
             var increases = 0;
             var windowSize = 3;
@@ -28,9 +34,19 @@
         private int SumOfWindow(int[] measurements, int start, int windowSize)
         {
             var sum = 0;
-            for (var i = 0; i < windowSize; i++) 
+            for (var i = 0; i < windowSize; i++)
                 sum += measurements[start - i];
             return sum;
+        }
+
+        public override int PartOne(string[] input)
+        {
+            return PartOne(input.Select(int.Parse).ToArray());
+        }
+
+        public override int PartTwo(string[] input)
+        {
+            return PartTwo(input.Select(int.Parse).ToArray());
         }
     }
 }

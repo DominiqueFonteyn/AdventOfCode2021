@@ -29,7 +29,7 @@ namespace AdventOfCode.Tests.Day1
                 263,
             };
             
-            Assert.Equal(7, _sonarSweep.CountNumberOfIncreases(measurements));
+            Assert.Equal(7, _sonarSweep.PartOne(measurements));
         }
         
         
@@ -48,7 +48,7 @@ namespace AdventOfCode.Tests.Day1
                 792
             };
             
-            Assert.Equal(5, _sonarSweep.CountNumberOfIncreasesBySlidingWindow(measurements));
+            Assert.Equal(5, _sonarSweep.PartTwo(measurements));
         }
     }
 }

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.IO;
 using System.Linq;
+using System.Xml.Schema;
 using AdventOfCode.Day4;
 
 namespace AdventOfCode
@@ -10,6 +11,7 @@ namespace AdventOfCode
         private static void Main(string[] args)
         {
             Console.WriteLine(new GiantSquid().PartOne(File.ReadAllLines(args[0])));
+            Console.WriteLine(new GiantSquid().PartTwo(File.ReadAllLines(args[0])));
             
             if (!args.Any())
             {

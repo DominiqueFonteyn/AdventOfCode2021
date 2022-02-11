@@ -33,7 +33,13 @@ namespace AdventOfCode.Tests.Day4
         {
             Assert.Equal(4512, new GiantSquid().PartOne(_input));
         }
-
+        
+        [Fact]
+        public void PartTwo()
+        {
+            Assert.Equal(1924, new GiantSquid().PartTwo(_input));
+        }
+        
         [Fact]
         public void ReadPickedNumbers()
         {

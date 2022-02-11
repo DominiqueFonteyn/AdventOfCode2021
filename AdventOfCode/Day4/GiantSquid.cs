@@ -39,7 +39,35 @@ namespace AdventOfCode.Day4
 
         public override int PartTwo(string[] input)
         {
-            throw new NotImplementedException();
+            var numbers = ReadPickedNumbers(input);
+            var boards = ParseBoards(input).ToList();
+
+            var lastNumber = 0;
+            foreach (var number in numbers)
+            {
+                lastNumber = number;
+                var ignoreBoards = new List<BingoBoard>();
+                foreach(var board in boards)
+                {
+                    board.Mark(number);
+                    if (board.HasCompleteRow())
+                        ignoreBoards.Add(board);
+                }
+
+                foreach (var board in ignoreBoards)
+                    boards.Remove(board);
+
+                if (boards.Count== 1)
+                {
+                    // boards.Single().Unmark(number);
+                    break;
+                }
+            }
+
+            Console.WriteLine();
+            
+            var sumOfUnmarked = boards.Single().UnmarkedNumbers().Sum(x => x);
+            return sumOfUnmarked * lastNumber;
         }
 
         public int[] ReadPickedNumbers(string[] input)
@@ -119,6 +147,11 @@ namespace AdventOfCode.Day4
                     .Select(x => x.Value)
                     .ToArray();
             }
+
+            public void Unmark(int number)
+            {
+                Numbers.SingleOrDefault(x => x.Value == number)?.Unmark();
+            }
         }
 
         public class Number
@@ -136,6 +169,16 @@ namespace AdventOfCode.Day4
             public void Mark()
             {
                 IsMarked = true;
+            }
+
+            public void Unmark()
+            {
+                IsMarked = false;
+            }
+
+            public override string ToString()
+            {
+                return IsMarked ? $"[{Value}]" : $"{Value}";
             }
         }
     }

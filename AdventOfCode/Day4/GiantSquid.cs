@@ -75,9 +75,9 @@ namespace AdventOfCode.Day4
 
         public class BingoBoard
         {
-            public static int Size = 5;
+            public const int Size = 5;
 
-            public BingoBoard(int[] numbers)
+            public BingoBoard(IEnumerable<int> numbers)
             {
                 Numbers = numbers.Select(x => new Number(x)).ToArray();
             }

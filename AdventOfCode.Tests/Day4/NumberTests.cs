@@ -8,7 +8,7 @@ namespace AdventOfCode.Tests.Day4
         [Fact]
         public void InitWithNumber()
         {
-            var number = new GiantSquid.Number(10);
+            var number = new Number(10);
             
             Assert.Equal(10, number.Value);
             Assert.False(number.IsMarked);
@@ -17,7 +17,7 @@ namespace AdventOfCode.Tests.Day4
         [Fact]
         public void Mark()
         {
-            var number = new GiantSquid.Number(10);
+            var number = new Number(10);
             
             number.Mark();
             

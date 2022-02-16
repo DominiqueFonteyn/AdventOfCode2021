@@ -12,73 +12,71 @@ namespace AdventOfCode.Day4
 
         public override int PartOne(string[] input)
         {
-            var numbers = ReadPickedNumbers(input);
-            var boards = ParseBoards(input);
+            var numbers = ReadNumbers(input);
+            var boards = ReadBoards(input);
 
-            BingoBoard winningBoard = null;
-            var lastNumber = 0;
+            PrintNumbers(numbers);
+
             foreach (var number in numbers)
-            {
-                lastNumber = number;
-                foreach (var board in boards)
+                for (var i = 0; i < boards.Length; i++)
                 {
-                    board.Mark(number);
-                    if (board.HasCompleteRow()) 
-                        winningBoard = board;
+                    boards[i].Mark(number);
+                    if (boards[i].Wins())
+                    {
+                        PrintBoard(i, boards[i]);
+                        return boards[i].Score(number);
+                    }
                 }
 
-                if (winningBoard != null)
-                    break;
-            }
-
-            if (winningBoard == null) return 0;
-
-            var sumOfUnmarked = winningBoard.UnmarkedNumbers().Sum(x => x);
-            return sumOfUnmarked * lastNumber;
+            return 0;
         }
 
         public override int PartTwo(string[] input)
         {
-            var numbers = ReadPickedNumbers(input);
-            var boards = ParseBoards(input).ToList();
+            var numbers = ReadNumbers(input);
+            var boards = ReadBoards(input).ToArray();
+            var winners = new HashSet<int>();
+
+            PrintNumbers(numbers);
 
             var lastNumber = 0;
             foreach (var number in numbers)
-            {
-                lastNumber = number;
-                var ignoreBoards = new List<BingoBoard>();
-                foreach(var board in boards)
+                for (var i = 0; i < boards.Length; i++)
                 {
-                    board.Mark(number);
-                    if (board.HasCompleteRow())
-                        ignoreBoards.Add(board);
+                    if (winners.Contains(i))
+                        continue;
+
+                    boards[i].Mark(number);
+                    if (boards[i].Wins())
+                    {
+                        PrintBoard(i, boards[i]);
+                        winners.Add(i);
+                        lastNumber = number;
+                    }
                 }
 
-                foreach (var board in ignoreBoards)
-                    boards.Remove(board);
-
-                if (boards.Count== 1)
-                {
-                    // boards.Single().Unmark(number);
-                    break;
-                }
-            }
-
-            Console.WriteLine();
-            
-            var sumOfUnmarked = boards.Single().UnmarkedNumbers().Sum(x => x);
-            return sumOfUnmarked * lastNumber;
+            return boards[winners.Last()].Score(lastNumber);
         }
 
-        public int[] ReadPickedNumbers(string[] input)
+        private static void PrintBoard(int i, BingoBoard board)
+        {
+            Console.WriteLine($"Board {i + 1} won");
+            Console.WriteLine(board);
+        }
+
+        private void PrintNumbers(int[] numbers)
+        {
+            Console.WriteLine(string.Join(", ", numbers));
+        }
+
+        public int[] ReadNumbers(string[] input)
         {
             return input[0].Split(',').Select(int.Parse).ToArray();
         }
 
-        public BingoBoard[] ParseBoards(string[] input)
+        public BingoBoard[] ReadBoards(string[] input)
         {
             var boards = new List<BingoBoard>();
-
             for (var i = 2; i < input.Length; i++)
             {
                 var numbers = new List<int>();
@@ -87,8 +85,7 @@ namespace AdventOfCode.Day4
                 {
                     numbers.AddRange(
                         input[i + row]
-                            .Split(" ")
-                            .Where(x => !string.IsNullOrWhiteSpace(x))
+                            .Split(' ', StringSplitOptions.RemoveEmptyEntries)
                             .Select(int.Parse));
                     row++;
                 }
@@ -99,87 +96,6 @@ namespace AdventOfCode.Day4
             }
 
             return boards.ToArray();
-        }
-
-        public class BingoBoard
-        {
-            public const int Size = 5;
-
-            public BingoBoard(IEnumerable<int> numbers)
-            {
-                Numbers = numbers.Select(x => new Number(x)).ToArray();
-            }
-
-            public Number[] Numbers { get; }
-
-            public bool HasCompleteRow()
-            {
-                for (var i = 0; i < Size; i++)
-                {
-                    if (Row(i).All(x => x.IsMarked)) return true;
-                    if (Column(i).All(x => x.IsMarked)) return true;
-                }
-
-                return false;
-            }
-
-            private IEnumerable<Number> Row(int position)
-            {
-                for (var i = 0; i < Size; i++)
-                    yield return Numbers[position + i];
-            }
-
-            private IEnumerable<Number> Column(int position)
-            {
-                for (var i = 0; i < Size; i++)
-                    yield return Numbers[position + i * Size];
-            }
-
-            public void Mark(int number)
-            {
-                Numbers.SingleOrDefault(x => x.Value == number)?.Mark();
-            }
-
-            public int[] UnmarkedNumbers()
-            {
-                return Numbers
-                    .Where(x => !x.IsMarked)
-                    .Select(x => x.Value)
-                    .ToArray();
-            }
-
-            public void Unmark(int number)
-            {
-                Numbers.SingleOrDefault(x => x.Value == number)?.Unmark();
-            }
-        }
-
-        public class Number
-        {
-            public Number(int value)
-            {
-                Value = value;
-                IsMarked = false;
-            }
-
-            public int Value { get; }
-
-            public bool IsMarked { get; private set; }
-
-            public void Mark()
-            {
-                IsMarked = true;
-            }
-
-            public void Unmark()
-            {
-                IsMarked = false;
-            }
-
-            public override string ToString()
-            {
-                return IsMarked ? $"[{Value}]" : $"{Value}";
-            }
         }
     }
 }

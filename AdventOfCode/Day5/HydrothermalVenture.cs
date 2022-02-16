@@ -46,6 +46,15 @@ namespace AdventOfCode.Day5
         public Coordinate Start { get; }
         public Coordinate End { get; }
 
+        public static Vector FromString(string str)
+        {
+            var split = str.Split(" -> ");
+            return new Vector(
+                Coordinate.FromString(split[0]),
+                Coordinate.FromString(split[1]));
+        }
+
+
         public override string ToString()
         {
             return $"{Start} -> {End}";
@@ -66,6 +75,12 @@ namespace AdventOfCode.Day5
         public override string ToString()
         {
             return $"{X},{Y}";
+        }
+
+        public static Coordinate FromString(string str)
+        {
+            var split = str.Split(',');
+            return new Coordinate(int.Parse(split[0]), int.Parse(split[1]));
         }
     }
 }

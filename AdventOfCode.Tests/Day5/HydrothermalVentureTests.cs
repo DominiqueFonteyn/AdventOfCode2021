@@ -36,6 +36,7 @@ namespace AdventOfCode.Tests.Day5
         private const int Y1 = 9;
         private const int X2 = 5;
         private const int Y2 = 8;
+        private const string VectorStr = "0,9 -> 5,8";
 
         [Fact]
         public void Ctor()
@@ -52,7 +53,16 @@ namespace AdventOfCode.Tests.Day5
         public void OverridesToString()
         {
             var vector = new Vector(new Coordinate(X1, Y1), new Coordinate(X2, Y2));
-            Assert.Equal("0,9 -> 5,8", vector.ToString());
+            
+            Assert.Equal(VectorStr, vector.ToString());
+        }
+
+        [Fact]
+        public void InitializeFromString()
+        {
+            var vector = Vector.FromString(VectorStr);
+            
+            Assert.Equal(VectorStr, vector.ToString());
         }
     }
 
@@ -60,6 +70,7 @@ namespace AdventOfCode.Tests.Day5
     {
         private const int Y = 9;
         private const int X = 5;
+        private const string CoordinateStr = "5,9";
 
         [Fact]
         public void CtorSetsX()
@@ -76,7 +87,15 @@ namespace AdventOfCode.Tests.Day5
         [Fact]
         public void OverridesToString()
         {
-            Assert.Equal("5,9", new Coordinate(X,Y).ToString());
+            Assert.Equal(CoordinateStr, new Coordinate(X,Y).ToString());
+        }
+
+        [Fact]
+        public void InitializeFromString()
+        {
+            var coordinate = Coordinate.FromString(CoordinateStr);
+            
+            Assert.Equal(CoordinateStr, coordinate.ToString());
         }
     }
 }

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Text;
 
 namespace AdventOfCode.Day5
 {
@@ -37,13 +38,24 @@ namespace AdventOfCode.Day5
 
         public void Apply(Vector vector)
         {
-            foreach (var coordinate in vector.Project()) 
+            foreach (var coordinate in vector.Project())
                 _grid[coordinate.Y, coordinate.X] += 1;
         }
 
         public int ValueAt(Coordinate position)
         {
             return _grid[position.Y, position.X];
+        }
+
+        public int CountOverlaps()
+        {
+            var count = 0;
+            for (var i = 0; i < Height; i++)
+            for (var j = 0; j < Width; j++)
+                if (_grid[i, j] >= 2)
+                    count++;
+
+            return count;
         }
     }
 

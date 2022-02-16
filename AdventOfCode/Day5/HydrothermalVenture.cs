@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 
 namespace AdventOfCode.Day5
 {
@@ -21,17 +22,30 @@ namespace AdventOfCode.Day5
 
     public class Grid
     {
-        private readonly int _height;
-        private readonly int _width;
+        private readonly int[,] _grid;
 
-        private int[,] _grid;
-
-        public Grid(int width, int height)
+        public Grid(int height, int width)
         {
-            _width = width;
-            _height = height;
+            Width = width;
+            Height = height;
 
             _grid = new int[height, width];
+        }
+
+        public int Height { get; }
+        public int Width { get; }
+
+        public void Apply(Vector vector)
+        {
+            foreach (var coordinate in vector.Project())
+            {
+                _grid[coordinate.Y, coordinate.X] = 1;
+            }
+        }
+
+        public int ValueAt(Coordinate position)
+        {
+            return _grid[position.Y, position.X];
         }
     }
 
@@ -54,6 +68,15 @@ namespace AdventOfCode.Day5
                 Coordinate.FromString(split[1]));
         }
 
+        public IEnumerable<Coordinate> Project()
+        {
+            if (Start.X == End.X)
+                for (var i = Start.Y; i <= End.Y; i++)
+                    yield return new Coordinate(Start.X, i);
+            else
+                for (var i = Start.X; i <= End.X; i++)
+                    yield return new Coordinate(i, Start.Y);
+        }
 
         public override string ToString()
         {

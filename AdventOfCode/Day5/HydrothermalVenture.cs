@@ -39,7 +39,16 @@ namespace AdventOfCode.Day5
     {
         public Vector(Coordinate start, Coordinate end)
         {
-            
+            Start = start;
+            End = end;
+        }
+
+        public Coordinate Start { get; }
+        public Coordinate End { get; }
+
+        public override string ToString()
+        {
+            return $"{Start} -> {End}";
         }
     }
 

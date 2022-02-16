@@ -32,6 +32,28 @@ namespace AdventOfCode.Tests.Day5
 
     public class VectorTests
     {
+        private const int X1 = 0;
+        private const int Y1 = 9;
+        private const int X2 = 5;
+        private const int Y2 = 8;
+
+        [Fact]
+        public void Ctor()
+        {
+            var vector = new Vector(new Coordinate(X1, Y1), new Coordinate(X2, Y2));
+            
+            Assert.Equal(X1, vector.Start.X);
+            Assert.Equal(Y1, vector.Start.Y);
+            Assert.Equal(X2, vector.End.X);
+            Assert.Equal(Y2, vector.End.Y);
+        }
+
+        [Fact]
+        public void OverridesToString()
+        {
+            var vector = new Vector(new Coordinate(X1, Y1), new Coordinate(X2, Y2));
+            Assert.Equal("0,9 -> 5,8", vector.ToString());
+        }
     }
 
     public class CoordinateTests

@@ -37,10 +37,8 @@ namespace AdventOfCode.Day5
 
         public void Apply(Vector vector)
         {
-            foreach (var coordinate in vector.Project())
-            {
-                _grid[coordinate.Y, coordinate.X] = 1;
-            }
+            foreach (var coordinate in vector.Project()) 
+                _grid[coordinate.Y, coordinate.X] += 1;
         }
 
         public int ValueAt(Coordinate position)

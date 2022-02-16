@@ -74,6 +74,43 @@ namespace AdventOfCode.Tests.Day5
             Assert.Equal(1, grid.ValueAt(new Coordinate(0, 3)));
             Assert.Equal(0, grid.ValueAt(new Coordinate(0, 4)));
         }
+        
+        [Fact]
+        public void ApplyOverlappingHorizontalVectors() {
+            var grid = new Grid(10, 10);
+            
+            grid.Apply(Vector.FromString("1,0 -> 3,0"));
+            grid.Apply(Vector.FromString("2,0 -> 4,0"));
+            
+            Assert.Equal(1, grid.ValueAt(new Coordinate(1, 0)));
+            Assert.Equal(2, grid.ValueAt(new Coordinate(2, 0)));
+            Assert.Equal(2, grid.ValueAt(new Coordinate(3, 0)));
+            Assert.Equal(1, grid.ValueAt(new Coordinate(4, 0)));
+        }
+        
+        [Fact]
+        public void ApplyOverlappingVerticalVectors() {
+            var grid = new Grid(10, 10);
+            
+            grid.Apply(Vector.FromString("0,1 -> 0,3"));
+            grid.Apply(Vector.FromString("0,2 -> 0,4"));
+            
+            Assert.Equal(1, grid.ValueAt(new Coordinate(0, 1)));
+            Assert.Equal(2, grid.ValueAt(new Coordinate(0, 2)));
+            Assert.Equal(2, grid.ValueAt(new Coordinate(0, 3)));
+            Assert.Equal(1, grid.ValueAt(new Coordinate(0, 4)));
+        }
+
+        [Fact]
+        public void ApplyIntersectingVectors()
+        {
+            var grid = new Grid(10, 10);
+            
+            grid.Apply(Vector.FromString("2,4 -> 6,4"));
+            grid.Apply(Vector.FromString("3,1 -> 3,8"));
+            
+            Assert.Equal(2, grid.ValueAt(new Coordinate(3,4)));
+        }
     }
 
     public class VectorTests

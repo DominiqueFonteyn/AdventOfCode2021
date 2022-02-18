@@ -45,8 +45,8 @@ namespace AdventOfCode.Day5
 
             return Direction switch
             {
-                VectorDirection.Vertical => ProjectVertical(y1, y2),
-                VectorDirection.Horizontal => ProjectHorizontal(x1, x2),
+                VectorDirection.Vertical => ProjectVertical(),
+                VectorDirection.Horizontal => ProjectHorizontal(),
                 VectorDirection.Diagonal => ProjectDiagonal(),
                 _ => throw new ArgumentOutOfRangeException()
             };
@@ -74,14 +74,14 @@ namespace AdventOfCode.Day5
             }
         }
 
-        private IEnumerable<Coordinate> ProjectHorizontal(int x1, int x2)
+        private IEnumerable<Coordinate> ProjectHorizontal()
         {
             var coefficient = Start.X < End.X ? 1 : -1;
             for (var i = 0; i <= Math.Abs(End.X - Start.X); i++)
                 yield return new Coordinate(Start.X + i * coefficient, Start.Y);
         }
 
-        private IEnumerable<Coordinate> ProjectVertical(int y1, int y2)
+        private IEnumerable<Coordinate> ProjectVertical()
         {
             var coefficient = Start.Y < End.Y ? 1 : -1;
             for (var i = 0; i <= Math.Abs(End.Y - Start.Y); i++)

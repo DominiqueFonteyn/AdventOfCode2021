@@ -48,6 +48,8 @@ namespace AdventOfCode.Day5
             {
                 Console.WriteLine($"Applying {vector}");
                 _grid.Apply(vector);
+                // Console.WriteLine(_grid);
+                // Console.WriteLine();
             }
 
             return _grid.CountOverlaps();

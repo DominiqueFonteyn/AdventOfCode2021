@@ -15,6 +15,9 @@ namespace AdventOfCode.Day5
             foreach (var line in input)
             {
                 var vector = Vector.FromString(line);
+                if (vector.Direction == VectorDirection.Other)
+                    continue;
+
                 Console.WriteLine($"Applying {vector}");
                 grid.Apply(Vector.FromString(line));
                 Console.WriteLine(grid);

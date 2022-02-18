@@ -59,5 +59,16 @@ namespace AdventOfCode.Tests.Day5
                 coordinate => Assert.Equal("1,0", coordinate.ToString()),
                 coordinate => Assert.Equal("2,0", coordinate.ToString()));
         }
+
+        [Theory]
+        [InlineData("0,0 -> 5,0", VectorDirection.Horizontal)]
+        [InlineData("0,0 -> 0,5", VectorDirection.Vertical)]
+        [InlineData("0,0 -> 5,5", VectorDirection.Other)]
+        public void DetermineDirection(string vectorStr, VectorDirection direction)
+        {
+            var vector = Vector.FromString(vectorStr);
+
+            Assert.Equal(direction, vector.Direction);
+        }
     }
 }

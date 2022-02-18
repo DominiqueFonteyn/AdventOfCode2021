@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 
 namespace AdventOfCode.Day5
@@ -8,10 +9,24 @@ namespace AdventOfCode.Day5
         {
             Start = start;
             End = end;
+
+            DetermineDirection();
         }
 
         public Coordinate Start { get; }
         public Coordinate End { get; }
+
+        public VectorDirection Direction { get; private set; }
+
+        private void DetermineDirection()
+        {
+            if (Start.X == End.X)
+                Direction = VectorDirection.Vertical;
+            else if (Start.Y == End.Y)
+                Direction = VectorDirection.Horizontal;
+            else
+                Direction = VectorDirection.Other;
+        }
 
         public static Vector FromString(string str)
         {
@@ -23,17 +38,37 @@ namespace AdventOfCode.Day5
 
         public IEnumerable<Coordinate> Project()
         {
-            if (Start.X == End.X)
-                for (var i = Start.Y; i <= End.Y; i++)
-                    yield return new Coordinate(Start.X, i);
-            else
-                for (var i = Start.X; i <= End.X; i++)
-                    yield return new Coordinate(i, Start.Y);
+            switch (Direction)
+            {
+                case VectorDirection.Vertical:
+                {
+                    for (var i = Start.Y; i <= End.Y; i++)
+                        yield return new Coordinate(Start.X, i);
+                    break;
+                }
+                case VectorDirection.Horizontal:
+                {
+                    for (var i = Start.X; i <= End.X; i++)
+                        yield return new Coordinate(i, Start.Y);
+                    break;
+                }
+                case VectorDirection.Other:
+                    break;
+                default:
+                    throw new ArgumentOutOfRangeException();
+            }
         }
 
         public override string ToString()
         {
             return $"{Start} -> {End}";
         }
+    }
+
+    public enum VectorDirection
+    {
+        Horizontal,
+        Vertical,
+        Other
     }
 }

@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 
 namespace AdventOfCode.Day5
 {
@@ -42,13 +43,17 @@ namespace AdventOfCode.Day5
             {
                 case VectorDirection.Vertical:
                 {
-                    for (var i = Start.Y; i <= End.Y; i++)
+                    var y1 = Math.Min(Start.Y, End.Y);
+                    var y2 = Math.Max(Start.Y, End.Y);
+                    for (var i = y1; i <= y2; i++)
                         yield return new Coordinate(Start.X, i);
                     break;
                 }
                 case VectorDirection.Horizontal:
                 {
-                    for (var i = Start.X; i <= End.X; i++)
+                    var x1 = Math.Min(Start.X, End.X);
+                    var x2 = Math.Max(Start.X, End.X);
+                    for (var i = x1; i <= x2; i++)
                         yield return new Coordinate(i, Start.Y);
                     break;
                 }

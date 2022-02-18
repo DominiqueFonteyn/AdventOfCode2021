@@ -22,7 +22,13 @@ namespace AdventOfCode.Tests.Day5
         [Fact]
         public void PartOne()
         {
-            Assert.Equal(5, new HydrothermalVenture().PartOne(_input));
+            Assert.Equal(5, new HydrothermalVenture(_input).PartOne(_input));
+        }
+        
+        [Fact]
+        public void PartTwo()
+        {
+            Assert.Equal(12, new HydrothermalVenture(_input).PartTwo(_input));
         }
     }
 }

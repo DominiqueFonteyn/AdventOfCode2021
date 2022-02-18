@@ -11,10 +11,11 @@ namespace AdventOfCode
         private static void Main(string[] args)
         {
             var file = args[0];
+            var lines = File.ReadAllLines(file);
+            var day5 = new HydrothermalVenture(lines);
             
-            Console.WriteLine(new HydrothermalVenture().PartOne(File.ReadAllLines(file)));
-            Console.WriteLine();
-            // Console.WriteLine(new HydrothermalVenture().PartTwo(File.ReadAllLines(file)));
+            Console.WriteLine(day5.PartOne(lines));
+            Console.WriteLine(day5.PartTwo(lines));
             
             if (!args.Any())
             {

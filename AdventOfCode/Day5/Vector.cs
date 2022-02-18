@@ -26,7 +26,7 @@ namespace AdventOfCode.Day5
             else if (Start.Y == End.Y)
                 Direction = VectorDirection.Horizontal;
             else
-                Direction = VectorDirection.Other;
+                Direction = VectorDirection.Diagonal;
         }
 
         public static Vector FromString(string str)
@@ -57,7 +57,10 @@ namespace AdventOfCode.Day5
                         yield return new Coordinate(i, Start.Y);
                     break;
                 }
-                case VectorDirection.Other:
+                case VectorDirection.Diagonal:
+                    
+                    // TODO
+                    
                     break;
                 default:
                     throw new ArgumentOutOfRangeException();
@@ -74,6 +77,6 @@ namespace AdventOfCode.Day5
     {
         Horizontal,
         Vertical,
-        Other
+        Diagonal
     }
 }

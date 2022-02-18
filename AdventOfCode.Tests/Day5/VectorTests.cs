@@ -63,12 +63,34 @@ namespace AdventOfCode.Tests.Day5
         [Theory]
         [InlineData("0,0 -> 5,0", VectorDirection.Horizontal)]
         [InlineData("0,0 -> 0,5", VectorDirection.Vertical)]
-        [InlineData("0,0 -> 5,5", VectorDirection.Other)]
+        [InlineData("0,0 -> 5,5", VectorDirection.Diagonal)]
         public void DetermineDirection(string vectorStr, VectorDirection direction)
         {
             var vector = Vector.FromString(vectorStr);
 
             Assert.Equal(direction, vector.Direction);
+        }
+
+        [Fact]
+        public void ProjectDownwardsDiagonal()
+        {
+            var vector = Vector.FromString("1,1 -> 3,3");
+            
+            Assert.Collection(vector.Project(),
+                coordinate => Assert.Equal("1,1", coordinate.ToString()),
+                coordinate => Assert.Equal("2,2", coordinate.ToString()),
+                coordinate => Assert.Equal("3,3", coordinate.ToString()));
+        }
+        
+        [Fact]
+        public void ProjectUpwardsDiagonal()
+        {
+            var vector = Vector.FromString("9,7 -> 7,9");
+            
+            Assert.Collection(vector.Project(),
+                coordinate => Assert.Equal("7,9", coordinate.ToString()),
+                coordinate => Assert.Equal("8,8", coordinate.ToString()),
+                coordinate => Assert.Equal("9,7", coordinate.ToString()));
         }
     }
 }

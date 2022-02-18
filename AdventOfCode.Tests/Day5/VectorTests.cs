@@ -50,6 +50,17 @@ namespace AdventOfCode.Tests.Day5
         }
 
         [Fact]
+        public void ProjectVertical_Reversed()
+        {
+            var vector = Vector.FromString("0,2 -> 0,0");
+
+            Assert.Collection(vector.Project(),
+                coordinate => Assert.Equal("0,2", coordinate.ToString()),
+                coordinate => Assert.Equal("0,1", coordinate.ToString()),
+                coordinate => Assert.Equal("0,0", coordinate.ToString()));
+        }
+
+        [Fact]
         public void ProjectHorizontal()
         {
             var vector = Vector.FromString("0,0 -> 2,0");
@@ -58,6 +69,17 @@ namespace AdventOfCode.Tests.Day5
                 coordinate => Assert.Equal("0,0", coordinate.ToString()),
                 coordinate => Assert.Equal("1,0", coordinate.ToString()),
                 coordinate => Assert.Equal("2,0", coordinate.ToString()));
+        }
+
+        [Fact]
+        public void ProjectHorizontal_Reversed()
+        {
+            var vector = Vector.FromString("2,0 -> 0,0");
+
+            Assert.Collection(vector.Project(),
+                coordinate => Assert.Equal("2,0", coordinate.ToString()),
+                coordinate => Assert.Equal("1,0", coordinate.ToString()),
+                coordinate => Assert.Equal("0,0", coordinate.ToString()));
         }
 
         [Theory]
@@ -75,22 +97,44 @@ namespace AdventOfCode.Tests.Day5
         public void ProjectDownwardsDiagonal()
         {
             var vector = Vector.FromString("1,1 -> 3,3");
-            
+
             Assert.Collection(vector.Project(),
                 coordinate => Assert.Equal("1,1", coordinate.ToString()),
                 coordinate => Assert.Equal("2,2", coordinate.ToString()),
                 coordinate => Assert.Equal("3,3", coordinate.ToString()));
         }
-        
+
         [Fact]
-        public void ProjectUpwardsDiagonal()
+        public void ProjectDownwardsDiagonal_Reversed()
         {
-            var vector = Vector.FromString("9,7 -> 7,9");
-            
+            var vector = Vector.FromString("3,3 -> 1,1");
+
+            Assert.Collection(vector.Project(),
+                coordinate => Assert.Equal("3,3", coordinate.ToString()),
+                coordinate => Assert.Equal("2,2", coordinate.ToString()),
+                coordinate => Assert.Equal("1,1", coordinate.ToString()));
+        }
+
+        [Fact]
+        public void ProjectUpwardsDiagonal_Reversed()
+        {
+            var vector = Vector.FromString("7,9 -> 9,7");
+
             Assert.Collection(vector.Project(),
                 coordinate => Assert.Equal("7,9", coordinate.ToString()),
                 coordinate => Assert.Equal("8,8", coordinate.ToString()),
                 coordinate => Assert.Equal("9,7", coordinate.ToString()));
+        }
+
+        [Fact]
+        public void ProjectUpwardsDiagonal()
+        {
+            var vector = Vector.FromString("9,7 -> 7,9");
+
+            Assert.Collection(vector.Project(),
+                coordinate => Assert.Equal("9,7", coordinate.ToString()),
+                coordinate => Assert.Equal("8,8", coordinate.ToString()),
+                coordinate => Assert.Equal("7,9", coordinate.ToString()));
         }
     }
 }

@@ -1,8 +1,7 @@
 ﻿using System;
 using System.IO;
 using System.Linq;
-using AdventOfCode.Day4;
-using AdventOfCode.Day5;
+using AdventOfCode.Day6;
 
 namespace AdventOfCode
 {
@@ -13,8 +12,8 @@ namespace AdventOfCode
             var file = args[0];
             var lines = File.ReadAllLines(file);
             
-            Console.WriteLine(new HydrothermalVenture(lines).PartOne(lines));
-            Console.WriteLine(new HydrothermalVenture(lines).PartTwo(lines));
+            Console.WriteLine(new LanternFish().PartOne(lines));
+            Console.WriteLine(new LanternFish().PartTwo(lines));
             
             if (!args.Any())
             {

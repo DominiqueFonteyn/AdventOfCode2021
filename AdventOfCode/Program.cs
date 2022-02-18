@@ -2,6 +2,7 @@
 using System.IO;
 using System.Linq;
 using AdventOfCode.Day4;
+using AdventOfCode.Day5;
 
 namespace AdventOfCode
 {
@@ -11,9 +12,9 @@ namespace AdventOfCode
         {
             var file = args[0];
             
-            Console.WriteLine(new GiantSquid().PartOne(File.ReadAllLines(file)));
+            Console.WriteLine(new HydrothermalVenture().PartOne(File.ReadAllLines(file)));
             Console.WriteLine();
-            Console.WriteLine(new GiantSquid().PartTwo(File.ReadAllLines(file)));
+            // Console.WriteLine(new HydrothermalVenture().PartTwo(File.ReadAllLines(file)));
             
             if (!args.Any())
             {

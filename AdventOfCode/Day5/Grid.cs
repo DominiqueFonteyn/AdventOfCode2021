@@ -1,3 +1,5 @@
+using System.Text;
+
 namespace AdventOfCode.Day5
 {
     public class Grid
@@ -35,6 +37,19 @@ namespace AdventOfCode.Day5
                     count++;
 
             return count;
+        }
+
+        public override string ToString()
+        {
+            var strBuilder = new StringBuilder();
+            for (var i = 0; i < Height; i++)
+            {
+                for (var j = 0; j < Width; j++) 
+                    strBuilder.Append(_grid[i, j] == 0 ? "." : _grid[i, j].ToString());
+                strBuilder.AppendLine();
+            }
+
+            return strBuilder.ToString();
         }
     }
 }

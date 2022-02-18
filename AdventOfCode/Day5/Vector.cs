@@ -38,11 +38,6 @@ namespace AdventOfCode.Day5
 
         public IEnumerable<Coordinate> Project()
         {
-            var y1 = Math.Min(Start.Y, End.Y);
-            var y2 = Math.Max(Start.Y, End.Y);
-            var x1 = Math.Min(Start.X, End.X);
-            var x2 = Math.Max(Start.X, End.X);
-
             return Direction switch
             {
                 VectorDirection.Vertical => ProjectVertical(),
@@ -54,38 +49,32 @@ namespace AdventOfCode.Day5
 
         private IEnumerable<Coordinate> ProjectDiagonal()
         {
-            if (End.X - Start.X == End.Y - Start.Y)
-            {
-                var coefficient = Start.X < End.X ? 1 : -1;
-                for (var i = 0; i <= Math.Abs(End.X - Start.X); i++)
-                    yield return new Coordinate(
-                        Start.X + i * coefficient,
-                        Start.Y + i * coefficient
-                    );
-            }
-            else
-            {
-                var coefficient = Start.X < End.X ? 1 : -1;
-                for (var i = 0; i <= Math.Abs(End.X - Start.X); i++)
-                    yield return new Coordinate(
-                        Start.X + i * coefficient,
-                        Start.Y - i * coefficient
-                    );
-            }
+            var coefficient = Start.X < End.X ? 1 : -1;
+            var vertCoefficient = End.X - Start.X == End.Y - Start.Y ? 1 : -1;
+
+            for (var i = 0; i <= Math.Abs(End.X - Start.X); i++)
+                yield return new Coordinate(
+                    Start.X + i * coefficient,
+                    Start.Y + i * coefficient * vertCoefficient
+                );
         }
 
         private IEnumerable<Coordinate> ProjectHorizontal()
         {
             var coefficient = Start.X < End.X ? 1 : -1;
             for (var i = 0; i <= Math.Abs(End.X - Start.X); i++)
-                yield return new Coordinate(Start.X + i * coefficient, Start.Y);
+                yield return new Coordinate(
+                    Start.X + i * coefficient,
+                    Start.Y);
         }
 
         private IEnumerable<Coordinate> ProjectVertical()
         {
             var coefficient = Start.Y < End.Y ? 1 : -1;
             for (var i = 0; i <= Math.Abs(End.Y - Start.Y); i++)
-                yield return new Coordinate(Start.X, Start.Y + i * coefficient);
+                yield return new Coordinate(
+                    Start.X,
+                    Start.Y + i * coefficient);
         }
 
         public override string ToString()

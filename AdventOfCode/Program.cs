@@ -14,6 +14,8 @@ namespace AdventOfCode
             
             Console.WriteLine(new LanternFish().PartOne(lines));
             Console.WriteLine(new LanternFish().PartTwo(lines));
+
+            return;
             
             if (!args.Any())
             {

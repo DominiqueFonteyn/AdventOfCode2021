@@ -1,50 +1,50 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 
 namespace AdventOfCode.Day6
 {
-    public class LanternFish : Day<int>
+    public class LanternFish : Day<long>
     {
         public LanternFish() : base(6)
         {
         }
 
-        public override int PartOne(string[] input)
+        public override long PartOne(string[] input)
         {
             var fish = new List<int>(input[0].Split(',').Select(int.Parse));
-
-            Iterate(fish, 80);
-
-            return fish.Count;
+            return SimulateSpawn(fish.ToArray(), 80);
         }
 
-        public override int PartTwo(string[] input)
+        public override long PartTwo(string[] input)
         {
-            throw new NotImplementedException();
+            var fish = new List<int>(input[0].Split(',').Select(int.Parse));
+            return SimulateSpawn(fish.ToArray(), 256);
         }
 
-        public void Iterate(List<int> fish, int numberOfDays)
+        public long SimulateSpawn(int[] fish, int dayCount)
         {
-            for (var i = 0; i < numberOfDays; i++)
+            // initialize bucket
+            var bucket = new long[9];
+            for (var age = 0; age < bucket.Length; age++)
+                bucket[age] = fish.Count(x => x == age);
+
+            // simulate growth
+            for (var day = 0; day < dayCount; day++)
             {
-                var spawn = 0;
-                for (var f = 0; f < fish.Count; f++)
-                {
-                    if (fish[f] == 0)
-                    {
-                        spawn++;
-                        fish[f] = 6;
-                    }
-                    else
-                    {
-                        fish[f] -= 1;
-                    }
-                }
+                var afterSpawn = new long[bucket.Length];
 
-                for (var j = 0; j < spawn; j++) 
-                    fish.Add(8);
+                for (var age = 0; age < bucket.Length; age++)
+                    afterSpawn[age] = age switch
+                    {
+                        6 => bucket[0] + bucket[age + 1],
+                        8 => bucket[0],
+                        _ => bucket[age + 1]
+                    };
+
+                bucket = afterSpawn;
             }
+
+            return bucket.Sum();
         }
     }
 }

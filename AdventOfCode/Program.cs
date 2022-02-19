@@ -1,7 +1,7 @@
 ﻿using System;
 using System.IO;
 using System.Linq;
-using AdventOfCode.Day6;
+using AdventOfCode.Day7;
 
 namespace AdventOfCode
 {
@@ -12,8 +12,8 @@ namespace AdventOfCode
             var file = args[0];
             var lines = File.ReadAllLines(file);
             
-            Console.WriteLine(new LanternFish().PartOne(lines));
-            Console.WriteLine(new LanternFish().PartTwo(lines));
+            Console.WriteLine(new WhaleTreachery().PartOne(lines));
+            Console.WriteLine(new WhaleTreachery().PartTwo(lines));
 
             return;
             
@@ -62,5 +62,10 @@ namespace AdventOfCode
         public int DayNr { get; }
         public abstract T PartOne(string[] input);
         public abstract T PartTwo(string[] input);
+
+        protected static int[] ParseToIntArray(string[] input)
+        {
+            return input[0].Split(',').Select(int.Parse).ToArray();
+        }
     }
 }

@@ -13,15 +13,51 @@ namespace AdventOfCode.Day8
         public override int PartOne(string[] input)
         {
             var notes = NotesParser.Parse(input);
-            
-            
-            
-            return 0;
+
+            var mapping = new Dictionary<int, char[]>
+            {
+                { 0, "abcefg".ToCharArray() },
+                { 1, "cf".ToCharArray() },
+                { 2, "acdeg".ToCharArray() },
+                { 3, "acdfg".ToCharArray() },
+                { 4, "bcdf".ToCharArray() },
+                { 5, "abdfg".ToCharArray() },
+                { 6, "abdefg".ToCharArray() },
+                { 7, "acf".ToCharArray() },
+                { 8, "abcdefg".ToCharArray() },
+                { 9, "abcdfg".ToCharArray() }
+            };
+
+            var outcome = 0;
+            foreach (var note in notes)
+            foreach (var output in note.Outputs)
+            {
+                var digit = DetermineDigit(output);
+                if (digit > -1)
+                {
+                    outcome++;
+                    Console.WriteLine($"{output} = {digit}; {outcome}");
+                }
+            }
+
+            return outcome;
+        }
+
+        private int DetermineDigit(string value)
+        {
+            return value.Length switch
+            {
+                2 => 1,
+                3 => 7,
+                4 => 4,
+                7 => 8,
+                _ => -1
+            };
         }
 
         public override int PartTwo(string[] input)
         {
-            throw new NotImplementedException();
+            return 0;
         }
     }
 

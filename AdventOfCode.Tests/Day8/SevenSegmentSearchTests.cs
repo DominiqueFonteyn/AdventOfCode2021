@@ -28,6 +28,12 @@ namespace AdventOfCode.Tests.Day8
         }
 
         [Fact]
+        public void PartTwo()
+        {
+            Assert.Equal(61229, new SevenSegmentSearch().PartTwo(_input));
+        }
+
+        [Fact]
         public void Map()
         {
             var patterns = new[]

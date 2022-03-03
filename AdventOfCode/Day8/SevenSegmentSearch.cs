@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text;
 
 namespace AdventOfCode.Day8
 {
@@ -67,13 +68,36 @@ namespace AdventOfCode.Day8
 
             // find 2
             mapping.Add(2, length5.Single());
-            
+
             return mapping;
         }
 
         public override int PartTwo(string[] input)
         {
-            return 0;
+            var notes = NotesParser.Parse(input);
+
+            var sum = 0;
+            foreach (var note in notes)
+            {
+                var map = Map(note.Signals);
+
+                var display = new StringBuilder();
+                foreach (var output in note.Outputs) display.Append(FindDigit(map, output));
+
+                sum += int.Parse(display.ToString());
+            }
+
+            return sum;
+        }
+
+        private int FindDigit(Dictionary<int, string> mapping, string value)
+        {
+            return mapping.Single(x => SortString(x.Value) == SortString(value)).Key;
+        }
+
+        private string SortString(string value)
+        {
+            return new string(value.ToCharArray().OrderBy(x => x).ToArray());
         }
     }
 

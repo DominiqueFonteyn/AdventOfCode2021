@@ -1,4 +1,5 @@
-﻿using AdventOfCode.Day9;
+﻿using System.Linq;
+using AdventOfCode.Day9;
 using Xunit;
 
 namespace AdventOfCode.Tests.Day9
@@ -31,7 +32,25 @@ namespace AdventOfCode.Tests.Day9
             Assert.Equal(2, grid[0,0]);
             Assert.Equal(6, grid[2,3]);
         }
-        
-        
+
+        [Fact]
+        public void FindLowPoints()
+        {
+            var smokeBasin = new SmokeBasin();
+            var grid = smokeBasin.MapToGrid(_input);
+            
+            var lowPoints = new SmokeBasin().FindLowPoints(grid).ToArray();
+
+            Assert.Equal(4, lowPoints.Length);
+            Assert.True(lowPoints.Contains(0));
+            Assert.True(lowPoints.Contains(1));
+            Assert.True(lowPoints.Contains(5));
+        }
+
+        [Fact]
+        public void RiskLevel()
+        {
+            Assert.Equal(2, new SmokeBasin().RiskLevel(1));
+        }
     }
 }

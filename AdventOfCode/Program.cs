@@ -1,6 +1,6 @@
 ﻿using System;
 using System.IO;
-using AdventOfCode.Day8;
+using AdventOfCode.Day9;
 
 namespace AdventOfCode
 {
@@ -11,10 +11,8 @@ namespace AdventOfCode
             var file = args[0];
             var lines = File.ReadAllLines(file);
 
-            Console.WriteLine(new SevenSegmentSearch().PartOne(lines));
-            Console.WriteLine(new SevenSegmentSearch().PartTwo(lines));
-
-            return;
+            Console.WriteLine(new SmokeBasin().PartOne(lines));
+            // Console.WriteLine(new SmokeBasin().PartTwo(lines));
 
             // if (!args.Any())
             // {

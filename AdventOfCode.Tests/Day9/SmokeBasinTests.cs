@@ -19,5 +19,19 @@ namespace AdventOfCode.Tests.Day9
         {
             Assert.Equal(15, new SmokeBasin().PartOne(_input));
         }
+
+        [Fact]
+        public void MapToGrid()
+        {
+            var grid = new SmokeBasin().MapToGrid(_input);
+
+            Assert.Equal(5, grid.GetLength(0));
+            Assert.Equal(10, grid.GetLength(1));
+            
+            Assert.Equal(2, grid[0,0]);
+            Assert.Equal(6, grid[2,3]);
+        }
+        
+        
     }
 }

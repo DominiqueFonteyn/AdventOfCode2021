@@ -14,33 +14,10 @@ namespace AdventOfCode.Day8
         {
             var notes = NotesParser.Parse(input);
 
-            var mapping = new Dictionary<int, char[]>
-            {
-                { 0, "abcefg".ToCharArray() },
-                { 1, "cf".ToCharArray() },
-                { 2, "acdeg".ToCharArray() },
-                { 3, "acdfg".ToCharArray() },
-                { 4, "bcdf".ToCharArray() },
-                { 5, "abdfg".ToCharArray() },
-                { 6, "abdefg".ToCharArray() },
-                { 7, "acf".ToCharArray() },
-                { 8, "abcdefg".ToCharArray() },
-                { 9, "abcdfg".ToCharArray() }
-            };
-
-            var outcome = 0;
-            foreach (var note in notes)
-            foreach (var output in note.Outputs)
-            {
-                var digit = DetermineDigit(output);
-                if (digit > -1)
-                {
-                    outcome++;
-                    Console.WriteLine($"{output} = {digit}; {outcome}");
-                }
-            }
-
-            return outcome;
+            return notes.Sum(note =>
+                note.Outputs.Select(DetermineDigit)
+                    .Count(digit =>
+                        new[] { 1, 4, 7, 8 }.Contains(digit)));
         }
 
         private int DetermineDigit(string value)
@@ -53,6 +30,45 @@ namespace AdventOfCode.Day8
                 7 => 8,
                 _ => -1
             };
+        }
+
+        public Dictionary<int, string> Map(string[] patterns)
+        {
+            var mapping = new Dictionary<int, string>
+            {
+                { 1, patterns.Single(x => x.Length == 2) },
+                { 7, patterns.Single(x => x.Length == 3) },
+                { 4, patterns.Single(x => x.Length == 4) },
+                { 8, patterns.Single(x => x.Length == 7) }
+            };
+
+            var length5 = patterns.Where(x => x.Length == 5).ToHashSet();
+            var length6 = patterns.Where(x => x.Length == 6).ToHashSet();
+
+            // find 3
+            mapping.Add(3, length5.Single(x => !mapping[1].ToCharArray().Except(x.ToCharArray()).Any()));
+            length5.Remove(mapping[3]);
+
+            // find 6
+            mapping.Add(6, length6.Single(x => mapping[1].ToCharArray().Except(x.ToCharArray()).Count() == 1));
+            length6.Remove(mapping[6]);
+
+            // find 9
+            var _4_7 = mapping[4].ToCharArray().Union(mapping[7].ToCharArray()).ToArray();
+            mapping.Add(9, length6.Single(x => x.ToCharArray().Intersect(_4_7).Count() == _4_7.Count()));
+            length6.Remove(mapping[9]);
+
+            // find 0
+            mapping.Add(0, length6.Single());
+
+            // find 5
+            mapping.Add(5, length5.Single(x => mapping[9].ToCharArray().Except(x.ToCharArray()).Count() == 1));
+            length5.Remove(mapping[5]);
+
+            // find 2
+            mapping.Add(2, length5.Single());
+            
+            return mapping;
         }
 
         public override int PartTwo(string[] input)

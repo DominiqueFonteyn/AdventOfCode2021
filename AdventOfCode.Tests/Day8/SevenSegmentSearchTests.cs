@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System.Collections.Generic;
+using System.Linq;
 using AdventOfCode.Day8;
 using Xunit;
 
@@ -24,6 +25,30 @@ namespace AdventOfCode.Tests.Day8
         public void PartOne()
         {
             Assert.Equal(26, new SevenSegmentSearch().PartOne(_input));
+        }
+
+        [Fact]
+        public void Map()
+        {
+            var patterns = new[]
+            {
+                "acedgfb", "cdfbe", "gcdfa", "fbcad", "dab", 
+                "cefabd", "cdfgeb", "eafb", "cagedb", "ab"
+            };
+
+            var mapping = new SevenSegmentSearch().Map(patterns);
+            
+            Assert.Equal(10, mapping.Keys.Count);
+            Assert.Equal("cagedb", mapping[0]);
+            Assert.Equal("ab", mapping[1]);
+            Assert.Equal("gcdfa", mapping[2]);
+            Assert.Equal("fbcad", mapping[3]);
+            Assert.Equal("eafb", mapping[4]);
+            Assert.Equal("cdfbe", mapping[5]);
+            Assert.Equal("cdfgeb", mapping[6]);
+            Assert.Equal("dab", mapping[7]);
+            Assert.Equal("acedgfb", mapping[8]);
+            Assert.Equal("cefabd", mapping[9]);
         }
     }
 

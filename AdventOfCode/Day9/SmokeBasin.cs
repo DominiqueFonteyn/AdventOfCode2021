@@ -36,7 +36,7 @@ namespace AdventOfCode.Day9
             return grid;
         }
 
-        public IEnumerable<int> FindLowPoints(int[,] grid)
+        public IEnumerable<Point> FindLowPoints(int[,] grid)
         {
             var overlay = new int[grid.GetLength(0), grid.GetLength(1)];
 
@@ -44,8 +44,8 @@ namespace AdventOfCode.Day9
             for (var j = 0; j < grid.GetLength(1); j++)
                 if (IsLowerThanAdjacentLocations(i, j, grid))
                 {
-                    Console.WriteLine($"grid[{i},{j}] = {grid[i,j]}");
-                    yield return grid[i, j];
+                    Console.WriteLine($"grid[{i},{j}] = {grid[i, j]}");
+                    yield return new Point(i, j, grid[i, j]);
                     overlay[i, j] = 1;
                 }
         }
@@ -67,9 +67,53 @@ namespace AdventOfCode.Day9
             if (i < height) yield return grid[i + 1, j];
         }
 
-        public int RiskLevel(int i)
+        public int RiskLevel(Point p)
         {
-            return i + 1;
+            return p.Value + 1;
+        }
+
+        public IEnumerable<int[]> FindBasins()
+        {
+            yield return new[] { 0, 1 };
+        }
+    }
+
+    public class Point
+    {
+        public Point(int i, int j, int value)
+        {
+            I = i;
+            J = j;
+            Value = value;
+        }
+
+        public int I { get; }
+        public int J { get; }
+        public int Value { get; }
+
+        public override bool Equals(object? obj)
+        {
+            return Equals(obj as Point);
+        }
+
+        private bool Equals(Point other)
+        {
+            return I == other.I && J == other.J && Value == other.Value;
+        }
+
+        public override int GetHashCode()
+        {
+            return HashCode.Combine(I, J, Value);
+        }
+
+        public static bool operator ==(Point left, Point right)
+        {
+            return Equals(left, right);
+        }
+
+        public static bool operator !=(Point left, Point right)
+        {
+            return !Equals(left, right);
         }
     }
 }

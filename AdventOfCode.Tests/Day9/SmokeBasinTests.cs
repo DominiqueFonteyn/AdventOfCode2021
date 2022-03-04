@@ -1,5 +1,4 @@
 ﻿using System.Linq;
-using System.Runtime.CompilerServices;
 using AdventOfCode.Day9;
 using Xunit;
 
@@ -16,12 +15,19 @@ namespace AdventOfCode.Tests.Day9
             "9899965678"
         };
 
+        private readonly SmokeBasin _smokeBasin;
+
+        public SmokeBasinTests()
+        {
+            _smokeBasin = new SmokeBasin();
+        }
+
         [Fact]
         public void PartOne()
         {
-            Assert.Equal(15, new SmokeBasin().PartOne(_input));
+            Assert.Equal(15, _smokeBasin.PartOne(_input));
         }
-        
+
         [Fact]
         public void PartOne_OtherSample()
         {
@@ -29,40 +35,65 @@ namespace AdventOfCode.Tests.Day9
             {
                 "111110"
             };
-            
-            Assert.Equal(1, new SmokeBasin().PartOne(input));
+
+            Assert.Equal(1, _smokeBasin.PartOne(input));
+        }
+
+        [Fact(Skip = "not ready yet")]
+        public void PartTwo()
+        {
+            Assert.Equal(1134, _smokeBasin.PartTwo(_input));
         }
 
         [Fact]
         public void MapToGrid()
         {
-            var grid = new SmokeBasin().MapToGrid(_input);
+            var grid = _smokeBasin.MapToGrid(_input);
 
             Assert.Equal(5, grid.GetLength(0));
             Assert.Equal(10, grid.GetLength(1));
-            
-            Assert.Equal(2, grid[0,0]);
-            Assert.Equal(6, grid[2,3]);
+
+            Assert.Equal(2, grid[0, 0]);
+            Assert.Equal(6, grid[2, 3]);
         }
 
         [Fact]
         public void FindLowPoints()
         {
-            var smokeBasin = new SmokeBasin();
-            var grid = smokeBasin.MapToGrid(_input);
-            
-            var lowPoints = new SmokeBasin().FindLowPoints(grid).ToArray();
+            var grid = _smokeBasin.MapToGrid(_input);
+
+            var lowPoints = _smokeBasin.FindLowPoints(grid).ToArray();
 
             Assert.Equal(4, lowPoints.Length);
-            Assert.Contains(0, lowPoints);
-            Assert.Contains(1, lowPoints);
-            Assert.Contains(5, lowPoints);
+            Assert.Contains(new Point(0, 9, 0), lowPoints);
+            Assert.Contains(new Point(0, 1, 1), lowPoints);
+            Assert.Contains(new Point(2, 2, 5), lowPoints);
+            Assert.Contains(new Point(4, 6, 5), lowPoints);
         }
 
         [Fact]
         public void RiskLevel()
         {
-            Assert.Equal(2, new SmokeBasin().RiskLevel(1));
+            Assert.Equal(2, _smokeBasin.RiskLevel(new Point(0, 0, 1)));
+        }
+
+        [Fact]
+        public void FindBasins()
+        {
+            string[] input =
+            {
+                "410"
+            };
+
+            var grid = _smokeBasin.MapToGrid(_input);
+            var lowPoints = _smokeBasin.FindLowPoints(grid);
+
+            // var basins = _smokeBasin.FindBasins(lowPoints, grid);
+            //
+            // var basin = Assert.Single(basins);
+            // Assert.Equal(2, basin.Length);
+            // Assert.Contains(1, basin);
+            // Assert.Contains(0, basin);
         }
     }
 }

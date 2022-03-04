@@ -12,7 +12,7 @@ namespace AdventOfCode
             var lines = File.ReadAllLines(file);
 
             Console.WriteLine(new SmokeBasin().PartOne(lines));
-            // Console.WriteLine(new SmokeBasin().PartTwo(lines));
+            Console.WriteLine(new SmokeBasin().PartTwo(lines));
 
             // if (!args.Any())
             // {

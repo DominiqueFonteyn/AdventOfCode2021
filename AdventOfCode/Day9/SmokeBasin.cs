@@ -22,16 +22,15 @@ namespace AdventOfCode.Day9
         {
             var grid = MapToGrid(input);
             var lowPoints = FindLowPoints(grid);
-            var basins = FindBasins(lowPoints, grid).ToArray();
-
-            foreach (var basin in basins)
-                Console.WriteLine($"Basin ({basin.Length}): {string.Join(", ", basin)}");
-
-            var top3 = basins.OrderByDescending(x => x.Length).Take(3);
+            var basins = FindBasins(lowPoints, grid).OrderByDescending(x => x.Length).ToArray();
+            var top3 = basins.Take(3);
 
             var totalSize = 1;
             foreach (var basin in top3)
+            {
+                Console.WriteLine($"Basin ({basin.Length}): {string.Join(", ", basin)}");
                 totalSize *= basin.Length;
+            }
 
             return totalSize;
         }
@@ -92,24 +91,35 @@ namespace AdventOfCode.Day9
 
         public IEnumerable<int[]> FindBasins(IEnumerable<Point> lowPoints, int[,] grid)
         {
-            return lowPoints.Select(point => FindBasin(point, grid).Select(x => x.Value).ToArray());
+            return lowPoints.Select(
+                point => FindBasin(point, grid, new HashSet<Point>()).Select(x => x.Value).ToArray());
         }
 
-        private IEnumerable<Point> FindBasin(Point startPoint, int[,] grid)
+        private IEnumerable<Point> FindBasin(Point startPoint, int[,] grid, HashSet<Point> ignore)
         {
             var basin = new HashSet<Point> { startPoint };
-            var queue = new Queue<Point>(FindAdjacentLocations(startPoint, grid));
+            var adjacentLocations = FindAdjacentLocations(startPoint, grid);
+            var queue = new Queue<Point>(adjacentLocations.Except(ignore));
 
             while (queue.Count > 0)
             {
                 var point = queue.Dequeue();
-                if (point.Value == 9 || point.Value != startPoint.Value + 1) continue;
-
-                foreach (var c in FindBasin(point, grid))
-                    basin.Add(c);
+                if (point.Value != 9 && (IsSameHeight(startPoint, point) || FlowsDownward(startPoint, point)))
+                    foreach (var c in FindBasin(point, grid, basin))
+                        basin.Add(c);
             }
 
             return basin;
+        }
+
+        private static bool FlowsDownward(Point startPoint, Point point)
+        {
+            return point.Value == startPoint.Value + 1;
+        }
+
+        private static bool IsSameHeight(Point startPoint, Point point)
+        {
+            return point.Value == startPoint.Value;
         }
     }
 }

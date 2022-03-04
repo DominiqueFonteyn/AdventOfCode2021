@@ -1,4 +1,5 @@
 ﻿using System.Linq;
+using System.Runtime.CompilerServices;
 using AdventOfCode.Day9;
 using Xunit;
 
@@ -19,6 +20,17 @@ namespace AdventOfCode.Tests.Day9
         public void PartOne()
         {
             Assert.Equal(15, new SmokeBasin().PartOne(_input));
+        }
+        
+        [Fact]
+        public void PartOne_OtherSample()
+        {
+            string[] input =
+            {
+                "111110"
+            };
+            
+            Assert.Equal(1, new SmokeBasin().PartOne(input));
         }
 
         [Fact]
@@ -42,9 +54,9 @@ namespace AdventOfCode.Tests.Day9
             var lowPoints = new SmokeBasin().FindLowPoints(grid).ToArray();
 
             Assert.Equal(4, lowPoints.Length);
-            Assert.True(lowPoints.Contains(0));
-            Assert.True(lowPoints.Contains(1));
-            Assert.True(lowPoints.Contains(5));
+            Assert.Contains(0, lowPoints);
+            Assert.Contains(1, lowPoints);
+            Assert.Contains(5, lowPoints);
         }
 
         [Fact]

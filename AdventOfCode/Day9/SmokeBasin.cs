@@ -38,19 +38,22 @@ namespace AdventOfCode.Day9
 
         public IEnumerable<int> FindLowPoints(int[,] grid)
         {
-            // var overlay = new int[grid.GetLength(0), grid.GetLength(1)];
+            var overlay = new int[grid.GetLength(0), grid.GetLength(1)];
 
             for (var i = 0; i < grid.GetLength(0); i++)
             for (var j = 0; j < grid.GetLength(1); j++)
                 if (IsLowerThanAdjacentLocations(i, j, grid))
+                {
+                    Console.WriteLine($"grid[{i},{j}] = {grid[i,j]}");
                     yield return grid[i, j];
-            // overlay[i, j] = 1;
+                    overlay[i, j] = 1;
+                }
         }
 
         private bool IsLowerThanAdjacentLocations(int i, int j, int[,] grid)
         {
             return FindAdjacentLocations(i, j, grid)
-                .All(adjacentLocation => adjacentLocation >= grid[i, j]);
+                .All(adjacentLocation => adjacentLocation > grid[i, j]);
         }
 
         private IEnumerable<int> FindAdjacentLocations(int i, int j, int[,] grid)

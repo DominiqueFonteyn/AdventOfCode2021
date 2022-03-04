@@ -15,7 +15,7 @@ namespace AdventOfCode.Day9
         public int J { get; }
         public int Value { get; }
 
-        public override bool Equals(object? obj)
+        public override bool Equals(object obj)
         {
             return Equals(obj as Point);
         }

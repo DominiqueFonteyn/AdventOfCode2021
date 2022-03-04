@@ -20,7 +20,20 @@ namespace AdventOfCode.Day9
 
         public override int PartTwo(string[] input)
         {
-            throw new NotImplementedException();
+            var grid = MapToGrid(input);
+            var lowPoints = FindLowPoints(grid);
+            var basins = FindBasins(lowPoints, grid).ToArray();
+
+            foreach (var basin in basins)
+                Console.WriteLine($"Basin ({basin.Length}): {string.Join(", ", basin)}");
+
+            var top3 = basins.OrderByDescending(x => x.Length).Take(3);
+
+            var totalSize = 1;
+            foreach (var basin in top3)
+                totalSize *= basin.Length;
+
+            return totalSize;
         }
 
         public int[,] MapToGrid(string[] input)
@@ -53,18 +66,23 @@ namespace AdventOfCode.Day9
         private bool IsLowerThanAdjacentLocations(int i, int j, int[,] grid)
         {
             return FindAdjacentLocations(i, j, grid)
-                .All(adjacentLocation => adjacentLocation > grid[i, j]);
+                .All(adjacentLocation => adjacentLocation.Value > grid[i, j]);
         }
 
-        private IEnumerable<int> FindAdjacentLocations(int i, int j, int[,] grid)
+        private IEnumerable<Point> FindAdjacentLocations(int i, int j, int[,] grid)
         {
             var height = grid.GetLength(0) - 1;
             var width = grid.GetLength(1) - 1;
 
-            if (j > 0) yield return grid[i, j - 1];
-            if (j < width) yield return grid[i, j + 1];
-            if (i > 0) yield return grid[i - 1, j];
-            if (i < height) yield return grid[i + 1, j];
+            if (j > 0) yield return new Point(i, j - 1, grid[i, j - 1]);
+            if (j < width) yield return new Point(i, j + 1, grid[i, j + 1]);
+            if (i > 0) yield return new Point(i - 1, j, grid[i - 1, j]);
+            if (i < height) yield return new Point(i + 1, j, grid[i + 1, j]);
+        }
+
+        private IEnumerable<Point> FindAdjacentLocations(Point point, int[,] grid)
+        {
+            return FindAdjacentLocations(point.I, point.J, grid);
         }
 
         public int RiskLevel(Point p)
@@ -72,9 +90,26 @@ namespace AdventOfCode.Day9
             return p.Value + 1;
         }
 
-        public IEnumerable<int[]> FindBasins()
+        public IEnumerable<int[]> FindBasins(IEnumerable<Point> lowPoints, int[,] grid)
         {
-            yield return new[] { 0, 1 };
+            return lowPoints.Select(point => FindBasin(point, grid).Select(x => x.Value).ToArray());
+        }
+
+        private IEnumerable<Point> FindBasin(Point startPoint, int[,] grid)
+        {
+            var basin = new HashSet<Point> { startPoint };
+            var queue = new Queue<Point>(FindAdjacentLocations(startPoint, grid));
+
+            while (queue.Count > 0)
+            {
+                var point = queue.Dequeue();
+                if (point.Value == 9 || point.Value != startPoint.Value + 1) continue;
+
+                foreach (var c in FindBasin(point, grid))
+                    basin.Add(c);
+            }
+
+            return basin;
         }
     }
 }

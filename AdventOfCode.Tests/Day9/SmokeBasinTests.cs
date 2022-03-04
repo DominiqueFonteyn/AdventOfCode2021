@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System.Collections.Generic;
+using System.Linq;
 using AdventOfCode.Day9;
 using Xunit;
 
@@ -39,7 +40,7 @@ namespace AdventOfCode.Tests.Day9
             Assert.Equal(1, _smokeBasin.PartOne(input));
         }
 
-        [Fact(Skip = "not ready yet")]
+        [Fact]
         public void PartTwo()
         {
             Assert.Equal(1134, _smokeBasin.PartTwo(_input));
@@ -77,23 +78,29 @@ namespace AdventOfCode.Tests.Day9
             Assert.Equal(2, _smokeBasin.RiskLevel(new Point(0, 0, 1)));
         }
 
-        [Fact]
-        public void FindBasins()
+        [Theory]
+        [MemberData(nameof(FindBasinsTestData))]
+        public void FindBasins(string[] input, IEnumerable<int> expectedBasin)
         {
-            string[] input =
-            {
-                "410"
-            };
-
-            var grid = _smokeBasin.MapToGrid(_input);
+            var grid = _smokeBasin.MapToGrid(input);
             var lowPoints = _smokeBasin.FindLowPoints(grid);
 
-            // var basins = _smokeBasin.FindBasins(lowPoints, grid);
-            //
-            // var basin = Assert.Single(basins);
-            // Assert.Equal(2, basin.Length);
-            // Assert.Contains(1, basin);
-            // Assert.Contains(0, basin);
+            var basins = _smokeBasin.FindBasins(lowPoints, grid);
+
+            var basin = Assert.Single(basins);
+            Assert.True(basin.OrderBy(x => x).SequenceEqual(expectedBasin.OrderBy(x => x)));
+        }
+
+        public static IEnumerable<object[]> FindBasinsTestData()
+        {
+            return new[]
+            {
+                new object[] { new[] { "910" }, new[] { 0, 1 } },
+                new object[] { new[] { "9210" }, new[] { 0, 1, 2 } },
+                new object[] { new[] { "943210" }, new[] { 0, 1, 2, 3, 4 } },
+                new object[] { new[] { "910", "923" }, new[] { 0, 1, 2, 3 } },
+                new object[] { new[] { "987" }, new[] { 7, 8 } }
+            };
         }
     }
 }

@@ -13,4 +13,13 @@
       <PackageReference Include="xunit" Version="2.4.1" />
     </ItemGroup>
 
+    <ItemGroup>
+      <None Update="2022\1\input.txt">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </None>
+      <None Update="2022\1\example.txt">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </None>
+    </ItemGroup>
+
 </Project>

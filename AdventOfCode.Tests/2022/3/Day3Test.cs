@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using Xunit;
 
 namespace AdventOfCode.Tests._2022._3
 {
@@ -11,34 +10,10 @@ namespace AdventOfCode.Tests._2022._3
         {
         }
 
-        [Fact]
-        public void Part1_Example()
-        {
-            var result = Calculate(ExampleData);
-            Assert.Equal(157, result);
-        }
+        protected override int ExpectedResultPart1 => 157;
+        protected override int ExpectedResultPart2 => 70;
 
-        [Fact]
-        public void Part1_Input()
-        {
-            var result = Calculate(InputData);
-            Assert.Equal(0, result);
-        }
-
-        [Fact]
-        public void Part2_Example()
-        {
-            var result = Calculate2(ExampleData);
-            Assert.Equal(70, result);
-        }
-
-        [Fact]
-        public void Part2_Input()
-        {
-            Assert.Equal(0, Calculate2(InputData));
-        }
-
-        private int Calculate(string[] input)
+        protected override int Calculate(string[] input)
         {
             var result = 0;
             foreach (var line in input)
@@ -55,7 +30,7 @@ namespace AdventOfCode.Tests._2022._3
             return result;
         }
 
-        private int Calculate2(string[] input)
+        protected override int Calculate2(string[] input)
         {
             var groups = new List<List<string>> { new List<string>() };
             for (var i = 0; i < input.Length; i++)

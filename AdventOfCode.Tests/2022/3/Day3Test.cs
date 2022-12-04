@@ -57,26 +57,21 @@ namespace AdventOfCode.Tests._2022._3
 
         private int Calculate2(string[] input)
         {
-            var firstGroup = new List<string>();
-            var secondGroup = new List<string>();
-
-            var count = 0;
-            foreach (var line in input)
+            var groups = new List<List<string>> { new List<string>() };
+            for (var i = 0; i < input.Length; i++)
             {
-                if (count < input.Length / 2)
+                var line = input[i];
+                groups.Last().Add(line);
+
+                if (groups.Last().Count == 3 && i < input.Length - 1)
                 {
-                    firstGroup.Add(line);
+                    groups.Add(new List<string>());
                 }
-                else
-                {
-                    secondGroup.Add(line);
-                }
-                count++;
             }
 
-            var item1 = FindCommonItem2(firstGroup);
-            var item2 = FindCommonItem2(secondGroup);
-            return ScoreItem(item1) + ScoreItem(item2);
+            return groups
+                .Select(x => ScoreItem(FindCommonItem2(x)))
+                .Sum();
         }
 
         private char FindCommonItem(string part1, string part2)
@@ -89,26 +84,19 @@ namespace AdventOfCode.Tests._2022._3
 
         private char FindCommonItem2(List<string> values)
         {
-            var exclude = new HashSet<char>();
-            
-            var result = '0';
-            foreach (var item in values.First())
-            {
-                if (exclude.Contains(item)) continue;
+            for (var c = 'a'; c <= 'z'; c++)
+                if (values.All(x => x.Contains(c)))
+                {
+                    return c;
+                }
 
-                result = item;
-                foreach (var str in values)
-                    if (!str.Contains(item, StringComparison.Ordinal))
-                    {
-                        result = '0';
-                        break;
-                    }
-                if (result == item) return item;
+            for (var c = 'A'; c <= 'Z'; c++)
+                if (values.All(x => x.Contains(c)))
+                {
+                    return c;
+                }
 
-                exclude.Add(item);
-            }
-
-            return result;
+            return '0';
         }
 
         private int ScoreItem(char item)
@@ -116,7 +104,7 @@ namespace AdventOfCode.Tests._2022._3
             var scoring = new Dictionary<char, int>();
             var score = 1;
             score = CalculateItemScoring(scoring, score, 'a', 'z');
-            score = CalculateItemScoring(scoring, score, 'A', 'Z');
+            CalculateItemScoring(scoring, score, 'A', 'Z');
 
             return scoring[item];
         }

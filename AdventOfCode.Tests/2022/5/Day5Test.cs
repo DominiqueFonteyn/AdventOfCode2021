@@ -11,7 +11,7 @@ namespace AdventOfCode.Tests._2022._5
         }
 
         protected override string ExpectedResultPart1 => "CMZ";
-        protected override string ExpectedResultPart2 { get; }
+        protected override string ExpectedResultPart2 => "MCD";
 
         protected override string Calculate(string[] data)
         {
@@ -53,7 +53,7 @@ namespace AdventOfCode.Tests._2022._5
                 .Replace("]", "");
         }
 
-        private void OperateCrane(Stack<string>[] containers, List<string> operations)
+        private void OperateCrane(Stack<string>[] containers, List<string> operations, bool moveMultiple = false)
         {
             foreach (var line in operations)
             {
@@ -63,8 +63,21 @@ namespace AdventOfCode.Tests._2022._5
                 var from = int.Parse(parts[1]);
                 var to = int.Parse(parts[2]);
 
-                for (var i = 0; i < amount; i++)
-                    containers[to - 1].Push(containers[from - 1].Pop());
+                if (moveMultiple)
+                {
+                    var temp = new Stack<string>();
+                    for (var i = 0; i < amount; i++)
+                        temp.Push(containers[from-1].Pop());
+                    for (var i = 0; i < amount; i++)
+                        containers[to-1].Push(temp.Pop());
+                }
+                else
+                {
+                    for (var i = 0; i < amount; i++)
+                        containers[to - 1].Push(containers[from - 1].Pop());    
+                }
+                
+                
             }
         }
 
@@ -92,7 +105,42 @@ namespace AdventOfCode.Tests._2022._5
 
         protected override string Calculate2(string[] data)
         {
-            throw new NotImplementedException();
+            var containerLines = new List<string>();
+            var operations = new List<string>();
+
+            var isContainerLine = true;
+            Stack<string>[] containers = null;
+
+            foreach (var line in data)
+            {
+                if (isContainerLine)
+                {
+                    containerLines.Add(line);
+                }
+                else
+                {
+                    if (line.Trim().Length > 0)
+                    {
+                        operations.Add(line);
+                        continue;
+                    }
+                }
+
+                if (line.StartsWith(" 1"))
+                {
+                    isContainerLine = false;
+                    containers = InitializeContainers(line);
+                }
+            }
+
+            FillContainers(containers, containerLines);
+
+            OperateCrane(containers, operations, true);
+
+            return string.Join(null, containers
+                    .Select(x => x.Peek()))
+                .Replace("[", "")
+                .Replace("]", "");
         }
     }
 }

@@ -3,25 +3,27 @@ using Xunit;
 
 namespace AdventOfCode.Tests
 {
-    public abstract class TestBase
+    public abstract class TestBase<T>
     {
-        private readonly int _year;
         private readonly int _day;
-        protected abstract int ExpectedResultPart1 { get; }
-        protected abstract int ExpectedResultPart2 { get; }
+
+        private readonly int _year;
 
         protected TestBase(int year, int day)
         {
             _year = year;
             _day = day;
         }
-        
+
+        protected abstract T ExpectedResultPart1 { get; }
+        protected abstract T ExpectedResultPart2 { get; }
+
         protected string[] ExampleData => File.ReadAllLines($"{_year}/{_day}/example.txt");
         protected string[] InputData => File.ReadAllLines($"{_year}/{_day}/input.txt");
-        
-        protected abstract int Calculate(string[] data);
-        protected abstract int Calculate2(string[] data);
-        
+
+        protected abstract T Calculate(string[] data);
+        protected abstract T Calculate2(string[] data);
+
         [Fact]
         public void Part1_Example()
         {
@@ -33,7 +35,7 @@ namespace AdventOfCode.Tests
         public void Part1_Input()
         {
             var result = Calculate(InputData);
-            Assert.Equal(0, result);
+            Assert.Equal(default, result);
         }
 
         [Fact]
@@ -46,7 +48,14 @@ namespace AdventOfCode.Tests
         [Fact]
         public void Part2_Input()
         {
-            Assert.Equal(0, Calculate2(InputData));
+            Assert.Equal(default, Calculate2(InputData));
+        }
+    }
+
+    public abstract class TestBase : TestBase<int>
+    {
+        protected TestBase(int year, int day) : base(year, day)
+        {
         }
     }
 }

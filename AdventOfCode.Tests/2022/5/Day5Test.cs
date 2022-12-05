@@ -32,8 +32,8 @@ namespace AdventOfCode.Tests._2022._5
                     if (line.Trim().Length > 0)
                     {
                         operations.Add(line);
+                        continue;
                     }
-                    continue;
                 }
 
                 if (line.StartsWith(" 1"))

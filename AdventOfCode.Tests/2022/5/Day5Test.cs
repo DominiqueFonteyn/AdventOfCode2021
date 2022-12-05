@@ -29,7 +29,10 @@ namespace AdventOfCode.Tests._2022._5
                 }
                 else
                 {
-                    operations.Add(line);
+                    if (line.Trim().Length > 0)
+                    {
+                        operations.Add(line);
+                    }
                     continue;
                 }
 
@@ -43,7 +46,7 @@ namespace AdventOfCode.Tests._2022._5
             FillContainers(containers, containerLines);
 
             OperateCrane(containers, operations);
-            
+
             return string.Join(null, containers
                     .Select(x => x.Peek()))
                 .Replace("[", "")
@@ -52,7 +55,17 @@ namespace AdventOfCode.Tests._2022._5
 
         private void OperateCrane(Stack<string>[] containers, List<string> operations)
         {
-            throw new NotImplementedException();
+            foreach (var line in operations)
+            {
+                var parts = line.Split(new[] { "move ", " from ", " to " }, StringSplitOptions.RemoveEmptyEntries);
+
+                var amount = int.Parse(parts[0]);
+                var from = int.Parse(parts[1]);
+                var to = int.Parse(parts[2]);
+
+                for (var i = 0; i < amount; i++)
+                    containers[to - 1].Push(containers[from - 1].Pop());
+            }
         }
 
         private Stack<string>[] InitializeContainers(string containerLine)

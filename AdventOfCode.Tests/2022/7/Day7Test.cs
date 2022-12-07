@@ -11,13 +11,23 @@ namespace AdventOfCode.Tests._2022._7
         }
 
         protected override int ExpectedResultPart1 => 95437;
-        protected override int ExpectedResultPart2 { get; }
+        protected override int ExpectedResultPart2 => 24933642;
 
         protected override int Calculate(string[] data)
         {
-            var directories = new List<Directory>();
+            var directories = BuildFileSystem(data);
 
+            return directories
+                .Select(x => x.Size())
+                .Where(x => x < 100000)
+                .Sum(x => x);
+        }
+
+        private static List<Directory> BuildFileSystem(string[] data)
+        {
+            var directories = new List<Directory>();
             var root = new Directory("/", null);
+            directories.Add(root);
             var currentDir = root;
             foreach (var line in data)
                 if (line.StartsWith("$ cd "))
@@ -47,16 +57,11 @@ namespace AdventOfCode.Tests._2022._7
                         currentDir.Add(new File(fileName, size));
                     }
                 }
-
-            return directories
-                .Select(x => x.Size())
-                .Where(x => x < 100000)
-                .Sum(x => x);
+            return directories;
         }
 
         private static Directory GoToDirectory(Directory currentDir, string path, Directory root)
         {
-
             currentDir = path switch
             {
                 "/" => root,
@@ -68,7 +73,13 @@ namespace AdventOfCode.Tests._2022._7
 
         protected override int Calculate2(string[] data)
         {
-            return 0;
+            var directories = BuildFileSystem(data);
+            var rootSize = directories.Single(x => x.Name == "/").Size();
+            var currentFreeSpace = 70000000 - rootSize;
+
+            var sizes = directories.Select(x => x.Size()).OrderBy(x => x);
+
+            return sizes.FirstOrDefault(size => currentFreeSpace + size > 30000000);
         }
 
         [Fact]

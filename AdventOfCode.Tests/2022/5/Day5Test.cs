@@ -44,13 +44,8 @@ namespace AdventOfCode.Tests._2022._5
             }
 
             FillContainers(containers, containerLines);
-
             OperateCrane(containers, operations);
-
-            return string.Join(null, containers
-                    .Select(x => x.Peek()))
-                .Replace("[", "")
-                .Replace("]", "");
+            return EndResult(containers);
         }
 
         private void OperateCrane(Stack<string>[] containers, List<string> operations, bool moveMultiple = false)
@@ -67,17 +62,15 @@ namespace AdventOfCode.Tests._2022._5
                 {
                     var temp = new Stack<string>();
                     for (var i = 0; i < amount; i++)
-                        temp.Push(containers[from-1].Pop());
+                        temp.Push(containers[from - 1].Pop());
                     for (var i = 0; i < amount; i++)
-                        containers[to-1].Push(temp.Pop());
+                        containers[to - 1].Push(temp.Pop());
                 }
                 else
                 {
                     for (var i = 0; i < amount; i++)
-                        containers[to - 1].Push(containers[from - 1].Pop());    
+                        containers[to - 1].Push(containers[from - 1].Pop());
                 }
-                
-                
             }
         }
 
@@ -134,9 +127,12 @@ namespace AdventOfCode.Tests._2022._5
             }
 
             FillContainers(containers, containerLines);
-
             OperateCrane(containers, operations, true);
+            return EndResult(containers);
+        }
 
+        private static string EndResult(Stack<string>[] containers)
+        {
             return string.Join(null, containers
                     .Select(x => x.Peek()))
                 .Replace("[", "")

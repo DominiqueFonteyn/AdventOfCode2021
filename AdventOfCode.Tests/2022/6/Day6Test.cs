@@ -15,30 +15,24 @@ namespace AdventOfCode.Tests._2022._6
 
         protected override int Calculate(string[] data)
         {
-            var input = data.Single();
-            for (var i = 0; i < input.Length - 4; i++)
-            {
-                var fragment = input.Substring(i, 4);
-                var set = new HashSet<char>(fragment);
-                if (set.Count == 4)
-                {
-                    return i + 4;
-                }
-            }
-
-            return 0;
+            return DetectStart(data, 4);
         }
 
         protected override int Calculate2(string[] data)
         {
+            return DetectStart(data, 14);
+        }
+
+        private static int DetectStart(string[] data, int packetSize)
+        {
             var input = data.Single();
-            for (var i = 0; i < input.Length - 14; i++)
+            for (var i = 0; i < input.Length - packetSize; i++)
             {
-                var fragment = input.Substring(i, 14);
+                var fragment = input.Substring(i, packetSize);
                 var set = new HashSet<char>(fragment);
-                if (set.Count == 14)
+                if (set.Count == packetSize)
                 {
-                    return i + 14;
+                    return i + packetSize;
                 }
             }
 
@@ -64,20 +58,6 @@ namespace AdventOfCode.Tests._2022._6
         [InlineData("zcfzfwzzqfrljwzlrfnpqdbhtmscgvjw", 26)]
         public void TestCalculate2(string input, int expected)
         {
-            // var result = 0;
-            // for (var i = 0; i < input.Length - 14; i++)
-            // {
-            //     var fragment = input.Substring(i, 14);
-            //     var set = new HashSet<char>(fragment);
-            //     
-            //     if (set.Count == 14)
-            //     {
-            //         result = i;
-            //         break;
-            //     }
-            // }
-            // Assert.Equal(expected, result);
-
             Assert.Equal(expected, Calculate2(new[] { input }));
         }
     }

@@ -1,4 +1,6 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
+using Xunit;
 
 namespace AdventOfCode.Tests._2022._7
 {
@@ -13,13 +15,15 @@ namespace AdventOfCode.Tests._2022._7
 
         protected override int Calculate(string[] data)
         {
+            var directories = new List<Directory>();
+
             var root = new Directory("/", null);
             var currentDir = root;
             foreach (var line in data)
                 if (line.StartsWith("$ cd "))
                 {
                     var path = line.Remove(0, "$ cd ".Length);
-                    currentDir = path == "/" ? root : currentDir.GoTo(path);
+                    currentDir = GoToDirectory(currentDir, path, root);
                 }
                 else if (line == "$ ls")
                 {
@@ -29,8 +33,10 @@ namespace AdventOfCode.Tests._2022._7
                 {
                     if (line.StartsWith("dir"))
                     {
-                        // it's  dir
-                        currentDir.Add(new Directory(line.Remove(0, "dir ".Length), currentDir));
+                        // it's a dir
+                        var dir = new Directory(line.Remove(0, "dir ".Length), currentDir);
+                        currentDir.Add(dir);
+                        directories.Add(dir);
                     }
                     else
                     {
@@ -42,12 +48,57 @@ namespace AdventOfCode.Tests._2022._7
                     }
                 }
 
-            return 0;
+            return directories
+                .Select(x => x.Size())
+                .Where(x => x < 100000)
+                .Sum(x => x);
+        }
+
+        private static Directory GoToDirectory(Directory currentDir, string path, Directory root)
+        {
+
+            currentDir = path switch
+            {
+                "/" => root,
+                ".." => currentDir.GoUp(),
+                _ => currentDir.GoTo(path)
+            };
+            return currentDir;
         }
 
         protected override int Calculate2(string[] data)
         {
             return 0;
+        }
+
+        [Fact]
+        public void File_ReturnsSize()
+        {
+            var file = new File("test", 10);
+
+            Assert.Equal(10, file.Size());
+        }
+
+        [Fact]
+        public void Directory_OnlyFiles_ReturnsSize()
+        {
+            var dir = new Directory("test", null);
+            dir.Add(new File("a", 10));
+            dir.Add(new File("b", 20));
+
+            Assert.Equal(30, dir.Size());
+        }
+
+        [Fact]
+        public void Directory_FilesAndSubdirectories_ReturnsSize()
+        {
+            var dir = new Directory("test", null);
+            var subdir = new Directory("sub", dir);
+            dir.Add(new File("a", 10));
+            dir.Add(subdir);
+            subdir.Add(new File("b", 20));
+
+            Assert.Equal(30, dir.Size());
         }
 
         public abstract class FileSystemNode
@@ -58,6 +109,7 @@ namespace AdventOfCode.Tests._2022._7
             }
 
             public string Name { get; }
+            public abstract int Size();
         }
 
         public class Directory : FileSystemNode
@@ -94,20 +146,27 @@ namespace AdventOfCode.Tests._2022._7
             {
                 return $"{Name} (dir)";
             }
+
+            public override int Size()
+            {
+                return _children.Values.Sum(x => x.Size());
+            }
         }
 
         public class File : FileSystemNode
         {
+            private readonly int _size;
+
             public File(string name, int size) : base(name)
             {
-                Size = size;
+                _size = size;
             }
 
-            public int Size { get; }
+            public override int Size() => _size;
 
             public override string ToString()
             {
-                return $"{Name} (file, size={Size})";
+                return $"{Name} (file, size={_size})";
             }
         }
     }

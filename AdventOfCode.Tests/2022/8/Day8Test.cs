@@ -7,7 +7,7 @@
         }
 
         protected override int ExpectedResultPart1 => 21;
-        protected override int ExpectedResultPart2 => 24933642;
+        protected override int ExpectedResultPart2 => 8;
 
         protected override int Calculate(string[] data)
         {
@@ -63,7 +63,6 @@
 
         private static bool IsEdge(int row, int rows, int col, int cols)
         {
-
             return row == 0 || row == rows - 1 || col == 0 || col == cols - 1;
         }
 
@@ -80,7 +79,61 @@
 
         protected override int Calculate2(string[] data)
         {
-            return 0;
+            var rows = data.Length;
+            var cols = data[0].Length;
+            var grid = InitGrid(data, rows, cols);
+
+            var highestScenicScore = 0;
+
+            var visibleTrees = 0;
+            for (var row = 0; row < rows; row++)
+            for (var col = 0; col < cols; col++)
+            {
+                if (IsEdge(row, rows, col, cols))
+                {
+                    visibleTrees++;
+                    continue;
+                }
+
+                var left = true;
+                var viewingDistanceLeft = 0;
+                for (var i = col - 1; i >= 0 && left; i--)
+                {
+                    viewingDistanceLeft++;
+                    left &= grid[row, i] < grid[row, col];
+                }
+
+                var right = true;
+                var viewingDistanceRight = 0;
+                for (var i = col + 1; i < cols && right; i++)
+                {
+                    viewingDistanceRight++;
+                    right &= grid[row, i] < grid[row, col];
+                }
+
+                var up = true;
+                var viewingDistanceUp = 0;
+                for (var i = row - 1; i >= 0 && up; i--)
+                {
+                    viewingDistanceUp++;
+                    up &= grid[i, col] < grid[row, col];
+                }
+
+                var down = true;
+                var viewingDistanceDown = 0;
+                for (var i = row + 1; i < rows && down; i++)
+                {
+                    viewingDistanceDown++;
+                    down &= grid[i, col] < grid[row, col];
+                }
+
+                var scenicScore = viewingDistanceLeft * viewingDistanceRight * viewingDistanceUp * viewingDistanceDown;
+
+                if (scenicScore > highestScenicScore)
+                    highestScenicScore = scenicScore;
+            }
+
+            return highestScenicScore;;
         }
     }
 }

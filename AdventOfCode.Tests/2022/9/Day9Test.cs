@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using Xunit;
 
 namespace AdventOfCode.Tests._2022._9
@@ -9,12 +10,27 @@ namespace AdventOfCode.Tests._2022._9
         {
         }
 
-        protected override int ExpectedResultPart1 { get; }
+        protected override int ExpectedResultPart1 => 13;
         protected override int ExpectedResultPart2 { get; }
 
         protected override int Calculate(string[] data)
         {
-            throw new NotImplementedException();
+            var head = new Position(0, 0);
+            var tail = new Position(0, 0);
+            var visited = new HashSet<Position> { new Position(0, 0) };
+
+            foreach (var line in data)
+            {
+                var motion = new Motion(line);
+
+                // handle motion
+                for (var i = 0; i < motion.Steps; i++)
+                {
+                    head.StepTo(motion.Direction);
+                }
+            }
+
+            return visited.Count;
         }
 
         protected override int Calculate2(string[] data)
@@ -70,6 +86,92 @@ namespace AdventOfCode.Tests._2022._9
 
             Assert.Equal(direction, motion.Direction);
             Assert.Equal(steps, motion.Steps);
+        }
+    }
+
+    #endregion
+
+    #region Position
+
+    public class Position
+    {
+        public Position(int x, int y)
+        {
+            X = x;
+            Y = y;
+        }
+
+        public int X { get; private set; }
+        public int Y { get; private set; }
+
+        public override string ToString()
+        {
+            return $"({X}, {Y})";
+        }
+
+        public override bool Equals(object obj)
+        {
+            if (!(obj is Position pos)) return false;
+            return pos.X == X && pos.Y == Y;
+        }
+
+        protected bool Equals(Position other)
+        {
+            return X == other.X
+                && Y == other.Y;
+        }
+
+        public override int GetHashCode()
+        {
+            return HashCode.Combine(X, Y);
+        }
+
+        public static bool operator ==(Position left, Position right)
+        {
+            return Equals(left, right);
+        }
+
+        public static bool operator !=(Position left, Position right)
+        {
+            return !Equals(left, right);
+        }
+
+        public void StepTo(Direction direction)
+        {
+            switch (direction)
+            {
+                case Direction.Up:
+                    Y++;
+                    break;
+                case Direction.Down:
+                    Y--;
+                    break;
+                case Direction.Right:
+                    X++;
+                    break;
+                case Direction.Left:
+                default:
+                    X--;
+                    break;
+            }
+        }
+    }
+
+    public class PositionTests
+    {
+        [Theory]
+        [InlineData(5, 5, Direction.Up, 5, 6)]
+        [InlineData(5, 5, Direction.Down, 5, 4)]
+        [InlineData(5, 5, Direction.Right, 6, 5)]
+        [InlineData(5, 5, Direction.Left, 4, 5)]
+        public void StepTo(int startX, int startY, Direction direction, int expectedX, int expectedY)
+        {
+            var position = new Position(startX, startY);
+
+            position.StepTo(direction);
+
+            Assert.Equal(expectedX, position.X);
+            Assert.Equal(expectedY, position.Y);
         }
     }
 

@@ -1,13 +1,17 @@
 ﻿using System;
 using System.Collections.Generic;
 using Xunit;
+using Xunit.Abstractions;
 
 namespace AdventOfCode.Tests._2022._9
 {
     public class Day9Test : TestBase
     {
-        public Day9Test() : base(2022, 9)
+        private readonly ITestOutputHelper _output;
+
+        public Day9Test(ITestOutputHelper output) : base(2022, 9)
         {
+            _output = output;
         }
 
         protected override int ExpectedResultPart1 => 13;
@@ -15,18 +19,29 @@ namespace AdventOfCode.Tests._2022._9
 
         protected override int Calculate(string[] data)
         {
-            var head = new Position(0, 0);
-            var tail = new Position(0, 0);
-            var visited = new HashSet<Position> { new Position(0, 0) };
+            var head = new Position(1, 1);
+            var tail = new Position(1, 1);
+            var visited = new HashSet<Position> { new Position(1, 1) };
+            var step = 0;
 
             foreach (var line in data)
             {
                 var motion = new Motion(line);
+                _output.WriteLine(line);
 
                 // handle motion
                 for (var i = 0; i < motion.Steps; i++)
                 {
+                    step++;
                     head.StepTo(motion.Direction);
+                    
+                    if (!tail.Touches(head))
+                    {
+                        tail.MoveTowards(head);
+                        visited.Add(tail);
+                    }
+                    
+                    _output.WriteLine($"step {step}: head {head} - tail {tail}");
                 }
             }
 
@@ -155,6 +170,32 @@ namespace AdventOfCode.Tests._2022._9
                     break;
             }
         }
+
+        public void MoveTowards(Position position)
+        {
+            if (position.Y == Y)
+            {
+                X += position.X > X ? 1 : -1;
+            }
+            else if (position.X == X)
+            {
+                Y += position.Y > Y ? 1 : -1;
+            }
+            else
+            {
+                Y += position.Y > Y ? 1 : -1;
+                X += position.X > X ? 1 : -1;
+            }
+        }
+
+        public bool Touches(Position pos)
+        {
+            if (pos == this) return true;
+            if (Math.Abs(pos.X - X) == 1 && Math.Abs(pos.Y - Y) == 1) return true;
+            if (Math.Abs(pos.X - X) == 1 && pos.Y == Y) return true;
+            if (Math.Abs(pos.Y - Y) == 1 && pos.X == X) return true;
+            return false;
+        }
     }
 
     public class PositionTests
@@ -172,6 +213,47 @@ namespace AdventOfCode.Tests._2022._9
 
             Assert.Equal(expectedX, position.X);
             Assert.Equal(expectedY, position.Y);
+        }
+
+        [Theory]
+        [InlineData(1, 1, 3, 1, 2, 1)] // horizontal
+        [InlineData(3, 1, 1, 1, 2, 1)]
+        [InlineData(1, 4, 1, 2, 1, 3)] // vertical
+        [InlineData(1, 2, 1, 4, 1, 3)]
+        [InlineData(2, 2, 3, 4, 3, 3)] // diagonal
+        [InlineData(2, 2, 4, 3, 3, 3)]
+        public void MoveTowards(int startX, int startY, int toX, int toY, int expectedX, int expectedY)
+        {
+            var position = new Position(startX, startY);
+
+            position.MoveTowards(new Position(toX, toY));
+
+            Assert.Equal(expectedX, position.X);
+            Assert.Equal(expectedY, position.Y);
+        }
+
+        [Theory]
+        [InlineData(5, 5, 5, 5, true)] // on same spot
+        [InlineData(5, 5, 4, 5, true)] // horizontal
+        [InlineData(5, 5, 6, 5, true)]
+        [InlineData(5, 5, 3, 5, false)]
+        [InlineData(5, 5, 7, 5, false)]
+        [InlineData(5, 5, 5, 4, true)] // vertical
+        [InlineData(5, 5, 5, 6, true)]
+        [InlineData(5, 5, 5, 3, false)]
+        [InlineData(5, 5, 5, 7, false)]
+        [InlineData(5, 5, 6, 6, true)] // diagonal
+        [InlineData(5, 5, 4, 4, true)] // diagonal
+        [InlineData(5, 5, 6, 4, true)] // diagonal
+        [InlineData(5, 5, 4, 6, true)] // diagonal
+        [InlineData(5, 5, 7, 7, false)] // diagonal
+        [InlineData(5, 5, 6, 9, false)] // diagonal
+        public void Touches(int headX, int headY, int tailX, int tailY, bool touches)
+        {
+            var head = new Position(headX, headY);
+            var tail = new Position(tailX, tailY);
+            
+            Assert.Equal(touches, tail.Touches(head));
         }
     }
 

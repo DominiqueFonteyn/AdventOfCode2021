@@ -18,7 +18,7 @@ namespace AdventOfCode.Tests
         protected abstract T ExpectedResultPart1 { get; }
         protected abstract T ExpectedResultPart2 { get; }
 
-        protected string[] ExampleData => File.ReadAllLines($"{_year}/{_day}/example.txt");
+        protected virtual string[] ExampleData(int part) => File.ReadAllLines($"{_year}/{_day}/example.txt");
         protected string[] InputData => File.ReadAllLines($"{_year}/{_day}/input.txt");
 
         protected abstract T Calculate(string[] data);
@@ -27,7 +27,7 @@ namespace AdventOfCode.Tests
         [Fact]
         public void Part1_Example()
         {
-            var result = Calculate(ExampleData);
+            var result = Calculate(ExampleData(1));
             Assert.Equal(ExpectedResultPart1, result);
         }
 
@@ -41,7 +41,7 @@ namespace AdventOfCode.Tests
         [Fact]
         public void Part2_Example()
         {
-            var result = Calculate2(ExampleData);
+            var result = Calculate2(ExampleData(2));
             Assert.Equal(ExpectedResultPart2, result);
         }
 

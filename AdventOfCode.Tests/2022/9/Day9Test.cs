@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using Xunit.Abstractions;
 
 namespace AdventOfCode.Tests._2022._9
@@ -14,7 +13,27 @@ namespace AdventOfCode.Tests._2022._9
         }
 
         protected override int ExpectedResultPart1 => 13;
-        protected override int ExpectedResultPart2 { get; }
+        protected override int ExpectedResultPart2 => 36;
+
+        protected override string[] ExampleData(int part)
+        {
+            if (part == 1)
+            {
+                return base.ExampleData(part);
+            }
+
+            return new[]
+            {
+                "R 5",
+                "U 8",
+                "L 8",
+                "D 3",
+                "R 17",
+                "D 10",
+                "L 25",
+                "U 20"
+            };
+        }
 
         protected override int Calculate(string[] data)
         {
@@ -31,13 +50,13 @@ namespace AdventOfCode.Tests._2022._9
                 for (var i = 0; i < motion.Steps; i++)
                 {
                     head.StepTo(motion.Direction);
-                    
+
                     if (!tail.Touches(head))
                     {
                         tail.MoveTowards(head);
                         visited.Add(tail);
                     }
-                    
+
                     _output.WriteLine($"step {++step}: head {head} - tail {tail}");
                 }
             }
@@ -47,7 +66,34 @@ namespace AdventOfCode.Tests._2022._9
 
         protected override int Calculate2(string[] data)
         {
-            throw new NotImplementedException();
+            var knots = new Position[10];
+            for (var i = 0; i < knots.Length; i++) knots[i] = new Position(1, 1);
+
+            var visited = new HashSet<Position> { new Position(1, 1) };
+            var step = 0;
+
+            foreach (var line in data)
+            {
+                var motion = new Motion(line);
+                _output.WriteLine(line);
+
+                for (var i = 0; i < motion.Steps; i++)
+                {
+                    knots[0].StepTo(motion.Direction);
+
+                    for (var knotIndex = 1; knotIndex < knots.Length; knotIndex++)
+                        if (!knots[knotIndex].Touches(knots[knotIndex - 1]))
+                        {
+                            knots[knotIndex].MoveTowards(knots[knotIndex - 1]);
+                        }
+
+                    visited.Add(knots[^1]);
+
+                    _output.WriteLine($"step {++step}: head {knots[0]} - tail {knots[^1]}");
+                }
+            }
+
+            return visited.Count;
         }
     }
 }
